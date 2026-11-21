@@ -45,6 +45,20 @@
       markup += `<rect x="180" y="86" width="264" height="72" rx="6" fill="${colors.amber}" opacity=".8"/>`;
       markup += `<rect x="180" y="174" width="124" height="78" rx="6" fill="${colors.rose}" opacity=".8"/>`;
       markup += `<rect x="320" y="174" width="124" height="78" rx="6" fill="${colors.sage}" opacity=".8"/>`;
+    } else if (type === 'spelling') {
+      const letters = ['S', 'P', 'E', 'L', 'L'];
+      const tiles = [colors.amber, colors.rose, colors.blue, colors.sage, colors.amber];
+      markup += `<rect x="28" y="24" width="444" height="252" rx="18" fill="${colors.panel}"/>`;
+      markup += `<rect x="52" y="48" width="140" height="14" rx="7" fill="${colors.blue}" opacity=".75"/>`;
+      markup += `<rect x="52" y="78" width="230" height="8" rx="4" fill="${colors.grid}"/>`;
+      letters.forEach(function (letter, index) {
+        const x = 52 + index * 78;
+        markup += `<rect x="${x}" y="112" width="64" height="74" rx="12" fill="${tiles[index]}"/>`;
+        markup += `<text x="${x + 32}" y="162" text-anchor="middle" font-family="Arial,sans-serif" font-size="38" font-weight="700" fill="#ffffff">${letter}</text>`;
+      });
+      markup += `<rect x="52" y="210" width="190" height="14" rx="7" fill="${colors.grid}"/>`;
+      markup += `<circle cx="416" cy="150" r="28" fill="${colors.blue}"/>`;
+      markup += `<path d="M412 138v24m0-4a9 9 0 0 0 9-9v-5a9 9 0 0 0-18 0v5a9 9 0 0 0 9 9m-13-7a13 13 0 0 0 26 0" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>`;
     } else if (type === 'game') {
       markup += `<rect width="500" height="300" fill="${colors.blue}"/>`;
       markup += `<circle cx="390" cy="92" r="46" fill="${colors.amber}"/>`;

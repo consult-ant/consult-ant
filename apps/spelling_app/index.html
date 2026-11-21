@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spelling practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#eef8f4;--ink:#1c2a4f;--pink:#ff4f87;--teal:#10a38f;--sun:#ffc43a;--card:#fff;--line:#c9ddd6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#13202b;--ink:#e8eefc;--pink:#ff7aa5;--teal:#36d1b8;--card:#1d2d3b;--line:#2f4457}}
+:root[data-theme="dark"]{--paper:#13202b;--ink:#e8eefc;--pink:#ff7aa5;--teal:#36d1b8;--card:#1d2d3b;--line:#2f4457}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{height:100%;margin:0}
+body{background:var(--paper);color:var(--ink);font:500 18px/1.4 'Baloo 2',ui-rounded,system-ui,sans-serif;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+button,input,textarea{font:inherit;color:inherit}
+button{min-height:52px;padding:0 20px;border:3px solid var(--ink);border-radius:16px;background:var(--card);font-weight:700;cursor:pointer}
+button:active{transform:translateY(2px)}button:focus-visible,textarea:focus-visible,input:focus-visible{outline:4px solid var(--sun);outline-offset:2px}
+button[hidden]{display:none}button:disabled{opacity:.4}
+#home{max-width:760px;margin:0 auto;padding:20px;height:100%;overflow:auto;box-sizing:border-box}
+#home[hidden],#prac[hidden]{display:none}
+h1{font-size:2.4rem;margin:0 0 12px}h2{margin:22px 0 8px}
+label{display:block;margin-top:12px;font-weight:700}
+input,textarea{width:100%;box-sizing:border-box;padding:10px 14px;border:3px solid var(--ink);border-radius:14px;background:var(--card);-webkit-user-select:text;user-select:text}
+textarea{font-size:1.2rem;resize:vertical}
+#txw{position:relative;background:var(--card);border-radius:14px}
+#txw textarea{display:block;position:relative;background:transparent;scrollbar-gutter:stable}
+#hl{position:absolute;inset:0;box-sizing:border-box;border:3px solid transparent;padding:10px 14px;font:inherit;font-size:1.2rem;white-space:pre-wrap;overflow-wrap:break-word;overflow:hidden;scrollbar-gutter:stable;color:transparent;pointer-events:none}
+#hl mark{color:transparent;background:rgba(255,196,58,.55);border-radius:4px;text-decoration:underline wavy var(--pink) 2px;text-underline-offset:4px}
+.legend{display:inline-block;padding:0 8px;border-radius:4px;background:rgba(255,196,58,.55);text-decoration:underline wavy var(--pink) 2px;text-underline-offset:4px}
+.row{display:flex;gap:14px;align-items:center;margin-top:10px}
+#saved{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{display:inline-flex;border:3px solid var(--ink);border-radius:999px;overflow:hidden;background:var(--card)}
+.chip button{min-height:40px;border:0;border-radius:0;padding:0 14px;background:none}
+.chip .rm{border-left:3px solid var(--ink);padding:0 12px}
+#modes{display:grid;gap:12px}
+.mode{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:14px 20px;min-height:84px;font-size:1.5rem;box-shadow:0 5px 0 var(--ink)}
+.mode small{font-weight:500;font-size:1rem}
+.mode:nth-child(1){background:var(--sun);color:#1c2a4f}.mode:nth-child(2){background:var(--pink);color:#1c2a4f}.mode:nth-child(3){background:#8fb4ff;color:#1c2a4f}.mode:nth-child(4){background:var(--teal);color:#1c2a4f}
+#mc{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:18px;padding:18px;overflow:auto}
+#mc[hidden]{display:none}
+.def{font-size:clamp(1.4rem,4vw,2.2rem);text-align:center;font-weight:700;line-height:1.3;background:var(--paper);border:3px dashed var(--ink);border-radius:20px;padding:18px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.opts button{min-height:76px;font-size:1.8rem}
+.opts button.ok{background:var(--teal);color:#1c2a4f}.opts button.no{background:var(--pink);color:#1c2a4f}
+.shk{animation:shk .35s}@keyframes shk{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+#prac{display:flex;flex-direction:column;height:100%;padding:10px 12px;box-sizing:border-box;gap:8px}
+header{display:flex;align-items:center;gap:12px}#ct{font-weight:700;font-size:1.2rem}
+#dots{display:flex;gap:6px;flex-wrap:wrap}
+#dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink)}
+#dots i.on{background:var(--sun)}#dots i.ok{background:var(--teal)}
+#peek{min-height:2.2rem;text-align:center;font-size:2rem;font-weight:700;letter-spacing:.12em}
+#ty{font-size:1.5rem;text-align:center;letter-spacing:.1em;font-weight:700}#ty[hidden]{display:none}
+#stage{position:relative;flex:1;min-height:0;border:3px solid var(--ink);border-radius:20px;background:var(--card);overflow:hidden}
+#sc{position:absolute;inset:0;overflow:hidden}
+#cv{display:block;touch-action:none}
+#sc::-webkit-scrollbar{width:28px}
+#sc::-webkit-scrollbar-track{background:var(--line);border-radius:0 16px 16px 0}
+#sc::-webkit-scrollbar-thumb{background:var(--ink);border-radius:14px;border:5px solid var(--line);min-height:70px}
+#msg{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:6px 18px;border-radius:999px;pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap}
+#msg.on{opacity:1}
+footer{display:flex;gap:6px;flex-wrap:nowrap;justify-content:center}
+footer button{flex:1 1 0;min-width:0;padding:0 6px;font-size:clamp(.75rem,2.1vw,1.1rem);white-space:nowrap;overflow:hidden}
+footer #pv,footer #nx{flex:0 0 auto;padding:0 16px}
+#nx.glow{background:var(--sun);color:#1c2a4f}
+#np{position:fixed;left:0;right:0;margin:auto;width:max-content;z-index:42;min-height:68px;padding:0 36px;font-size:1.7rem;background:var(--sun);color:#1c2a4f;box-shadow:0 6px 0 var(--ink);animation:npin .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes npin{from{scale:.3;opacity:0}to{scale:1;opacity:1}}
+@media(prefers-reduced-motion:reduce){#np{animation:none}}
+#win{position:fixed;inset:0;z-index:50;background:rgba(19,32,43,.8);display:flex;align-items:center;justify-content:center}
+#win[hidden]{display:none}
+#fx{position:absolute;inset:0;width:100%;height:100%}
+#wt{position:relative;text-align:center;padding:20px;animation:pp .7s cubic-bezier(.2,1.6,.4,1) both}
+#tro{font-size:clamp(4rem,16vw,8rem);line-height:1;display:inline-block;animation:wob 1.2s ease-in-out infinite}
+.big{font-size:clamp(2.4rem,9vw,5rem);font-weight:700;text-shadow:0 4px 0 rgba(0,0,0,.35)}
+.big span{display:inline-block;animation:bn .9s ease-in-out infinite}
+#ws{color:#fff;font-size:1.6rem;font-weight:700;margin:6px 0 18px}
+#wc{background:var(--sun);color:#1c2a4f;font-size:1.4rem;box-shadow:0 5px 0 #1c2a4f}
+@keyframes bn{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-18px) rotate(4deg) scale(1.1)}}
+@keyframes wob{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(8deg) scale(1.15)}}
+@keyframes pp{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+@media(prefers-reduced-motion:reduce){.big span,#tro,#wt{animation:none}}
+#mf{position:fixed;inset:0;width:100%;height:100%;z-index:40;pointer-events:none}
+#mt{position:fixed;left:0;right:0;top:16%;z-index:41;text-align:center;font-size:clamp(2.2rem,9vw,5rem);font-weight:700;color:#fff;-webkit-text-stroke:2px #1c2a4f;paint-order:stroke fill;text-shadow:0 5px 0 var(--pink);pointer-events:none;opacity:0}
+#mt.on{animation:mp 1.9s ease both}
+@keyframes mp{0%{transform:scale(.3) rotate(-6deg);opacity:0}15%{transform:scale(1.15) rotate(3deg);opacity:1}25%{transform:scale(1) rotate(0)}80%{opacity:1}100%{transform:scale(1.05);opacity:0}}
+@keyframes mf2{0%,80%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){#mt.on{animation:mf2 1.9s both}}
+</style></head>
+<body>
+<main id="home">
+<h1>Spelling practice</h1>
+<label for="nm">List name</label>
+<input id="nm" placeholder="e.g. Week 12">
+<label for="tx">Spellings (one per line, or separated by commas)</label>
+<p style="margin:2px 0 6px;font-size:1rem">For the Match game, add a meaning after a colon, like <b>because: for the reason that</b>. Common words get a meaning filled in automatically; any word without one is left out of Match. Words with no meaning yet are <span class="legend">highlighted</span> so you know to add one.</p>
+<div id="txw"><div id="hl" aria-hidden="true"></div><textarea id="tx" rows="7"></textarea></div>
+<div class="row"><button id="sv">Save list</button><span id="cnt"></span></div>
+<div id="saved"></div>
+<h2>Practise</h2>
+<div id="modes">
+<button class="mode" data-m="spider">Spider<small>Join the letters up in order</small></button>
+<button class="mode" data-m="box">Box<small>Write each letter in a box that fits it</small></button>
+<button class="mode" data-m="match">Match<small>Pick the word that fits the meaning</small></button>
+<button class="mode" data-m="test">Full test<small>Write every word on the lines</small></button>
+</div>
+</main>
+<section id="prac" hidden>
+<header><button id="bk">Back</button><div id="ct"></div></header>
+<div id="dots"></div>
+<div id="peek"></div>
+<input id="ty" hidden autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Type the spelling">
+<div id="stage"><div id="sc"><canvas id="cv"></canvas></div><div id="mc" hidden></div><div id="msg"></div></div>
+<footer>
+<button id="pv" aria-label="Previous word">◀</button>
+<button id="sy">Say it</button><button id="pk">Peek</button><button id="ck">Check</button><button id="tg">Type it</button><button id="cl">Clear</button><button id="mk" hidden>Mark ✓</button><button id="rs" hidden>Result</button>
+<button id="nx" aria-label="Next word">▶</button>
+</footer>
+</section>
+<script>
+const $=s=>document.querySelector(s),cv=$('#cv'),ctx=cv.getContext('2d');
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let lists=ld('sp_lists',[]),words=[],mode='',idx=0,W=0,H=0,ST={},TX={},D=new Set(),MK=new Set(),markMode=false,drag=null,pT,mT,typed=ld('sp_typed',false);
+const T=()=>typed&&(mode==='box'||mode==='test'),flat=w=>letters(w).join('');
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+let DEF={};
+let ALL=[];const BANK={};`accident|something bad that happens by mistake, not on purpose
+actual|real, not pretend
+address|the details of where someone lives
+answer|what you say when someone asks you a question
+appear|to come into view
+arrive|to get to a place
+beautiful|very pleasing to look at
+because|for the reason that
+behind|at the back of something
+believe|to feel sure something is true
+bicycle|a two-wheeled vehicle you pedal
+both|the two of them together
+breath|the air you take in and let out
+breathe|to take air in and out of your lungs
+build|to make something by putting parts together
+busy|having lots to do
+calendar|a chart showing the days, weeks and months of the year
+caught|got hold of something that was moving
+centre|the middle point
+century|one hundred years
+certain|completely sure
+children|boys and girls
+circle|a perfectly round shape
+climb|to go up using your hands and feet
+clothes|things you wear, like trousers and jumpers
+complete|finished, with nothing missing
+consider|to think about something carefully
+continue|to keep on going
+could|was able to
+decide|to make up your mind
+describe|to say what something is like
+different|not the same
+difficult|not easy
+disappear|to go out of sight
+door|something you open to go in or out of a room
+early|before the usual or expected time
+earth|the planet we live on
+eight|the number after seven
+enough|as much as you need
+every|each one of a group
+exercise|moving your body to keep fit
+experience|something that has happened to you
+experiment|a test to find something out
+extreme|very great, or as far as it can go
+famous|known by lots of people
+father|a male parent
+favourite|the one you like best
+february|the shortest month of the year
+floor|the surface you walk on inside a room
+forward|towards the front
+friend|someone you like and enjoy being with
+fruit|a sweet food like an apple or banana that grows on plants
+grammar|the rules for putting words together
+great|very good, or very big
+group|a number of people or things together
+guard|to keep safe by watching over
+guide|someone who shows others the way
+half|one of two equal parts
+heard|took in a sound with your ears
+heart|the body part that pumps blood
+height|how tall something is
+history|the story of things that happened in the past
+hour|sixty minutes
+imagine|to picture something in your mind
+important|really matters
+increase|to get bigger
+interest|wanting to know more about something
+island|land with water all around it
+knowledge|the facts and things you know
+learn|to find out how to do something
+length|how long something is
+library|a place where you can borrow books
+material|cloth, or what something is made from
+medicine|something you take to help you get better
+mention|to say something briefly
+minute|sixty seconds
+money|coins and notes used to buy things
+mother|a female parent
+move|to change place or position
+natural|made by nature, not by people
+naughty|badly behaved
+notice|to see or become aware of something
+occasion|a special event or time
+often|many times
+only|just one, and no more
+opposite|completely different, or facing across from
+ordinary|normal, not special
+parents|your mum and dad
+particular|one special thing, not any other
+peculiar|strange or odd
+people|men, women and children
+perhaps|maybe
+poor|having very little money
+popular|liked by lots of people
+position|where something is placed
+possess|to own or have
+possible|able to happen
+potatoes|round vegetables that grow underground, used for chips
+pressure|a pushing force
+pretty|nice to look at
+probably|very likely
+promise|to say you will definitely do something
+prove|to show that something is true
+purpose|the reason for doing something
+quarter|one of four equal parts
+question|something you ask to find out an answer
+recent|happened not long ago
+regular|happening again and again at the same times
+reign|the time a king or queen rules
+remember|to keep something in your mind
+sentence|a group of words that makes sense on its own
+separate|apart from each other
+should|ought to
+special|better or different from usual
+straight|not bending or curving
+strange|odd or unusual
+strength|how strong you are
+sugar|a sweet white or brown food added to drinks and cakes
+suppose|to guess or think something is likely
+surprise|something you did not expect
+therefore|so, as a result
+though|even if
+thought|an idea in your mind
+through|in one side and out of the other
+various|of several different kinds
+water|the clear liquid in rivers and seas
+weight|how heavy something is
+whole|all of something, not in pieces
+woman|a grown-up female
+women|more than one grown-up female
+would|used for saying what might happen
+accommodate|to provide a place for someone to stay, or to have enough room for
+accompany|to go somewhere with someone
+according|as stated by someone or something
+achieve|to succeed in doing something
+aggressive|angry and ready to attack or fight
+amateur|someone who does an activity for fun, not as a job
+ancient|from a very long time ago
+apparent|easy to see or understand
+appreciate|to be thankful for, or to understand how good something is
+attached|joined or fixed to something
+available|ready for you to use or get
+average|the usual or typical amount
+awkward|clumsy or uncomfortable
+bargain|something bought for less than its normal price
+bruise|a dark mark on the skin after a knock
+category|a group of things of the same kind
+cemetery|a place where dead people are buried
+committee|a group chosen to make decisions for a larger group
+communicate|to share information with others
+community|the people who live in the same area
+competition|a contest to find out who is best
+conscience|the inner voice that tells you right from wrong
+conscious|awake and aware of what is around you
+controversy|a lot of arguing about something people disagree on
+convenience|something that makes life easier
+correspond|to write letters to each other, or to match
+criticise|to say what you think is wrong with something
+curiosity|a strong wish to find things out
+definite|clear and certain
+desperate|so worried you will try anything
+determined|having made up your mind not to give up
+develop|to grow or change slowly
+dictionary|a book that tells you what words mean
+disastrous|causing great harm or ruin
+embarrass|to make someone feel shy or silly
+environment|the world around us, including land, air and water
+equip|to give someone what they need
+equipment|the things you need for a job or activity
+especially|more than anything else
+exaggerate|to say something is bigger or better than it really is
+excellent|extremely good
+existence|being alive or real
+explanation|words that make something clear
+familiar|well known to you
+foreign|from another country
+forty|the number after thirty-nine
+frequently|very often
+government|the people who run a country
+guarantee|a promise that something will happen or be mended
+harass|to keep annoying or troubling someone
+hindrance|something that gets in the way
+identity|who a person is
+immediate|happening right now, without delay
+individual|one single person or thing
+interfere|to get involved in something that is not your business
+interrupt|to break in while someone is speaking or working
+language|the words people use to talk and write
+leisure|free time to relax
+lightning|a bright flash in the sky during a storm
+marvellous|wonderful
+mischievous|playful in a naughty way
+muscle|a part of the body that makes you move
+necessary|needed
+neighbour|someone who lives next door or nearby
+nuisance|something or someone that is annoying
+occupy|to fill or take up a place or time
+occur|to happen
+opportunity|a chance to do something
+parliament|the group that makes the laws of a country
+persuade|to talk someone into doing something
+physical|to do with the body
+prejudice|an unfair opinion formed without knowing the facts
+privilege|a special right or advantage
+profession|a job that needs special training
+programme|a show on television or radio, or a plan of events
+pronunciation|the way a word is said
+queue|a line of people waiting
+recognise|to know someone or something because you have seen it before
+recommend|to say that something is good and worth trying
+relevant|connected to what is being talked about
+restaurant|a place where you pay to eat a meal
+rhyme|words that end with the same sound
+rhythm|a regular beat in music or poetry
+sacrifice|to give something up for someone else
+secretary|someone who types letters and arranges meetings for others
+shoulder|the part of the body between your neck and your arm
+signature|your name written in your own style
+sincere|honest and meaning what you say
+soldier|a person in an army
+stomach|the part of the body where food goes after you swallow
+sufficient|as much as is needed
+suggest|to put forward an idea
+symbol|a sign or picture that stands for something
+system|a set of parts or rules that work together
+temperature|how hot or cold something is
+thorough|careful and complete
+twelfth|number twelve in order
+variety|a mixture of different kinds
+vegetable|a plant you eat, like a carrot or cabbage
+vehicle|a machine such as a car or bus that carries people
+yacht|a sailing boat used for racing or pleasure`.split('\n').forEach(l=>{const i=l.indexOf('|');BANK[l.slice(0,i)]=l.slice(i+1)});
+const parse=t=>{DEF={};const out=[];t.split(/\n/).forEach(l=>{const m=l.match(/^\s*([^:=\t]+?)\s*(?::|=|\t|\s[-–—]\s)\s*(.+?)\s*$/);
+if(m){const w=m[1].toLowerCase();DEF[w]=m[2];out.push(w)}else l.split(/[,;]+/).forEach(s=>{s=s.trim().toLowerCase();if(s)out.push(s)})});const r=[...new Set(out)];r.forEach(w=>{if(!DEF[w]&&BANK[w])DEF[w]=BANK[w]});return r};
+const letters=w=>w.replace(/[^A-Za-z]/g,'').split('');
+const kind=c=>{const l=c.toLowerCase();return(c!==l||'bdfhklt'.includes(l))?'t':'gjpqy'.includes(l)?'l':'s'};
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const FONT=s=>`700 ${s}px 'Baloo 2',ui-rounded,system-ui,sans-serif`;
+
+/* ---------- home ---------- */
+function hl(){const t=$('#tx').value,R=/^\s*([^:=\t]+?)\s*(?::|=|\t|\s[-–—]\s)\s*(.+?)\s*$/,
+mk=w=>{const c=w.trim(),a=w.match(/^\s*/)[0],z=w.slice(a.length+c.length);return esc(a)+(c&&!DEF[c.toLowerCase()]?`<mark>${esc(c)}</mark>`:esc(c))+esc(z)};
+$('#hl').innerHTML=t.split('\n').map(l=>R.test(l)?esc(l):l.split(/([,;]+)/).map((p,i)=>i%2?esc(p):mk(p)).join('')).join('\n')+(t.endsWith('\n')?' ':'');$('#hl').scrollTop=$('#tx').scrollTop}
+function upd(){words=parse($('#tx').value);const dn=words.filter(w=>DEF[w]).length;$('#cnt').textContent=words.length+(words.length==1?' word':' words')+(dn?`, ${dn} with meanings`:'')+(words.length>dn?`, ${words.length-dn} need a meaning`:'');hl();
+document.querySelectorAll('.mode').forEach(b=>b.disabled=!words.length||(b.dataset.m==='match'&&words.filter(w=>DEF[w]).length<1));sv('sp_cur',{name:$('#nm').value,text:$('#tx').value})}
+function chips(){$('#saved').innerHTML=lists.map((l,i)=>`<span class="chip"><button class="ldb" data-i="${i}">${esc(l.name)}</button><button class="rm" data-i="${i}" aria-label="Delete ${esc(l.name)}">×</button></span>`).join('')}
+$('#saved').onclick=e=>{const i=e.target.dataset.i;if(i==null)return;
+if(e.target.classList.contains('rm')){lists.splice(i,1);sv('sp_lists',lists)}else{$('#nm').value=lists[i].name;$('#tx').value=lists[i].text}chips();upd()};
+$('#sv').onclick=()=>{upd();if(!words.length)return;const name=$('#nm').value.trim()||'My list',o={name,text:$('#tx').value},j=lists.findIndex(l=>l.name===name);
+j<0?lists.push(o):lists[j]=o;sv('sp_lists',lists);chips()};
+$('#tx').oninput=$('#nm').oninput=upd;
+$('#tx').addEventListener('scroll',()=>{$('#hl').scrollTop=$('#tx').scrollTop});
+document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>start(b.dataset.m));
+{const c=ld('sp_cur',{name:'',text:''});$('#nm').value=c.name;$('#tx').value=c.text;chips();upd()}
+
+/* ---------- practice shell ---------- */
+function start(m){mode=m;idx=0;ST={};TX={};D=new Set();MK=new Set();markMode=false;words=parse($('#tx').value);ALL=words;if(m==='match')words=words.filter(w=>DEF[w]);$('#home').hidden=true;$('#prac').hidden=false;
+requestAnimationFrame(()=>{$('#sc').scrollTop=0;size();render()})}
+$('#bk').onclick=()=>{$('#np').hidden=true;$('#prac').hidden=true;$('#home').hidden=false};
+function size(){const sc=$('#sc'),d=devicePixelRatio||1,t=mode==='test';sc.style.overflowY=t?'scroll':'hidden';W=sc.clientWidth;H=sc.clientHeight;CVH=t?Math.max(H,words.length*ROW()+24):H;
+cv.width=W*d;cv.height=CVH*d;cv.style.width=W+'px';cv.style.height=CVH+'px';ctx.setTransform(d,0,0,d,0,0)}
+addEventListener('resize',()=>{if(!$('#prac').hidden){size();draw()}});
+const ROW=()=>T()?84:100,per=()=>Math.max(1,words.length);let CVH=0;
+const key=()=>(mode==='test'?'t'+Math.floor(idx/per()):mode[0]+idx)+(T()?'k':'');
+const getSt=()=>ST[key()]||(ST[key()]={strokes:[],reveal:false,chain:0,path:[],links:[],pts:null,won:false,hint:0});
+function msg(t,ms=1800){const m=$('#msg');m.textContent=t;m.classList.add('on');clearTimeout(mT);mT=setTimeout(()=>m.classList.remove('on'),ms)}
+function render(){$('#np').hidden=true;const ty=$('#ty');cv.hidden=mode==='match';$('#mc').hidden=mode!=='match';ty.hidden=!T();$('#tg').hidden=mode==='spider';const hw=mode==='test'&&!typed;if(!hw)markMode=false;$('#mk').hidden=!hw;$('#rs').hidden=!markMode;$('#mk').textContent=markMode?'Stop marking':'Mark ✓';$('#tg').textContent=typed?'Handwrite':'Type it';size();const s=getSt();
+if(T()){ty.value=TX[mode+idx]||'';ty.maxLength=mode==='box'?flat(words[idx]).length:40;ty.focus({preventScroll:true})}$('#ct').textContent=`${{spider:'Spider',box:'Box',match:'Match',test:'Full test'}[mode]} · word ${idx+1} of ${words.length}`;
+$('#ck').textContent=mode==='spider'||mode==='match'?'Hint':'Check';$('#pk').hidden=mode==='test'||mode==='match';$('#sy').textContent=mode==='test'?'Say word '+(idx+1):mode==='match'?'Read it':'Say it';
+if(mode==='spider'&&!s.pts){s.L=letters(words[idx]);s.pts=scatter(s.L.length);if(s.L.length<2)s.won=true}
+clearTimeout(pT);$('#peek').textContent=(mode==='spider'&&s.won)?words[idx]:'';
+$('#nx').classList.toggle('glow',(mode==='spider'&&s.won)||(mode==='match'&&s.ok));
+$('#dots').innerHTML=words.map((w,i)=>`<i class="${i==idx?'on':''} ${D.has(i)?'ok':''}"></i>`).join('');if(mode==='match')mUI();draw()}
+const go=d=>{idx=Math.max(0,Math.min(words.length-1,idx+d));render();if(mode==='test'){const sc=$('#sc'),t=idx*ROW(),b=t+ROW()+12;if(t<sc.scrollTop)sc.scrollTop=t;else if(b>sc.scrollTop+H)sc.scrollTop=b-H}};
+$('#pv').onclick=()=>go(-1);$('#nx').onclick=()=>go(1);
+function sayIt(t){const ss=window.speechSynthesis;if(!ss||!window.SpeechSynthesisUtterance){msg("This browser can't speak words aloud",3500);return}
+const go=()=>{try{const u=new SpeechSynthesisUtterance(t),vs=ss.getVoices(),v=vs.find(x=>/^en[-_]GB$/i.test(x.lang))||vs.find(x=>/^en/i.test(x.lang));
+if(v){u.voice=v;u.lang=v.lang}else u.lang='en-GB';u.rate=.8;u.volume=1;
+u.onerror=ev=>{if(ev.error!=='canceled'&&ev.error!=='interrupted')msg('No voice found. Check Text-to-speech in the tablet settings',4500)};
+ss.speak(u);if(ss.paused)ss.resume()}catch(e){msg("Couldn't speak that word",3000)}};
+if(ss.speaking||ss.pending){ss.cancel();setTimeout(go,200)}else go()}
+$('#sy').onclick=()=>sayIt(mode==='match'?DEF[words[idx]]:words[idx]);
+$('#pk').onclick=()=>{$('#peek').textContent=words[idx];clearTimeout(pT);pT=setTimeout(()=>{if(!(mode==='spider'&&getSt().won))$('#peek').textContent=''},3000)};
+$('#cl').onclick=()=>{const s=getSt();s.strokes=[];s.reveal=false;delete TX[mode+idx];if(mode==='match')s.opts=null;if(mode==='spider'){s.chain=0;s.path=[];s.links=[];s.won=false;if(s.L.length<2)s.won=true}render()};
+$('#ck').onclick=()=>{const s=getSt();if(mode==='match'){hintM(s);return}if(mode==='spider'){s.hint=1;draw();setTimeout(()=>{s.hint=0;draw()},1800);return}
+s.reveal=!s.reveal;if(s.reveal){const p=per(),a=Math.floor(idx/p)*p,r=mode==='box'?[idx]:Array.from({length:Math.min(a+p,words.length)-a},(_,i)=>a+i),ok=i=>mode==='box'?flat(TX[mode+i]||'')===flat(words[i]):(TX[mode+i]||'').trim()===words[i];
+if(T()){const c=r.filter(ok);c.forEach(i=>D.add(i));msg(mode==='box'?(c.length?'Correct! 🌟':'Nearly. Look at the pink letters'):`${c.length} of ${r.length} correct`,2600)}else r.forEach(i=>D.add(i))}render();if(T()&&s.reveal&&mode==='box'&&flat(TX['box'+idx]||'')===flat(words[idx])){mini();nextPop()}if(T()&&s.reveal&&mode==='test'&&words.every((w,i)=>(TX['test'+i]||'').trim()===w))party(words.length)};
+$('#tg').onclick=()=>{typed=!typed;sv('sp_typed',typed);render()};
+$('#mk').onclick=()=>{markMode=!markMode;if(markMode)msg('Adult: tick each correct spelling',2600);render()};
+$('#rs').onclick=()=>{const n=words.length,ok=[...MK].filter(i=>i<n).length;if(ok===n){party(n);return}
+const bad=words.filter((w,i)=>!MK.has(i)),r=ok/n;
+$('#wb').textContent=`${ok} out of ${n}`;
+$('#ws').textContent=(r>=.8?'Great work!':r>=.5?'Good effort!':'Keep going, you can do it!')+(bad.length&&bad.length<=6?' Practise: '+bad.join(', '):'');
+$('#win').hidden=false;$('#wc').onclick=()=>{$('#win').hidden=true}};
+$('#ty').oninput=e=>{let v=e.target.value.toLowerCase();if(mode==='box')v=v.replace(/[^a-z]/g,'');e.target.value=v;TX[mode+idx]=v;getSt().reveal=false;draw()};
+$('#ty').onkeydown=e=>{if(e.key!=='Enter')return;e.preventDefault();if(mode==='test'&&idx<words.length-1)go(1);else $('#ck').click()};
+
+/* ---------- celebration ---------- */
+const COL=['#ff4f87','#ffc43a','#10a38f','#5b8cff','#a35bff','#ff8a3d'],EM=['⭐','🎈','🌟','🎉','🦄','🍭','🚀'];
+document.body.insertAdjacentHTML('beforeend','<div id="win" hidden><canvas id="fx"></canvas><div id="wt"><div id="tro">🏆</div><div class="big" id="wb"></div><div id="ws"></div><button id="wc">Hooray!</button></div></div>');
+/* ---------- match ---------- */
+const shuf=a=>a.sort(()=>Math.random()-.5);
+function mUI(){const s=getSt(),w=words[idx];
+if(!s.opts){s.opts=shuf([...shuf(ALL.filter(x=>x!==w)).slice(0,3),w]);s.bad=[];s.ok=false}
+const last=s.bad[s.bad.length-1];
+$('#mc').innerHTML=`<div class="def">${esc(DEF[w])}</div><div class="opts">${s.opts.map(o=>{const b=s.bad.includes(o);return `<button data-w="${esc(o)}" class="${s.ok&&o===w?'ok':b?(o===last&&!s.ok?'no shk':'no'):''}"${b?' disabled':''}>${esc(o)}</button>`}).join('')}</div>`;
+$('#peek').textContent=s.ok?w:''}
+function hintM(s){const w=words[idx];if(s.ok)return;const c=s.opts.filter(o=>o!==w&&!s.bad.includes(o));if(c.length>1){s.bad.push(c[0]);mUI()}else msg('Almost there! You can do it')}
+$('#mc').onclick=e=>{const b=e.target.closest('button');if(!b)return;const s=getSt(),w=words[idx];if(s.ok)return;const v=b.dataset.w;
+if(v===w){s.ok=true;D.add(idx);mini();nextPop();$('#nx').classList.add('glow')}else{s.bad.push(v);msg('Not quite. Try another!')}mUI()};
+/* ---------- next word pop-up ---------- */
+document.body.insertAdjacentHTML('beforeend','<button id="np" hidden></button>');
+let nT;
+function nextPop(){clearTimeout(nT);const i=idx,m=mode;nT=setTimeout(()=>{if(i!==idx||m!==mode||$('#prac').hidden)return;const s=getSt();if(!(m==='spider'?s.won:m==='match'?s.ok:s.reveal))return;
+const b=$('#np');b.textContent=idx>=words.length-1?'Finish 🎉':'Next word ▶';
+if(T()){b.style.bottom='auto';b.style.top='34%'}else{b.style.top='auto';b.style.bottom=(innerHeight-$('footer').getBoundingClientRect().top+12)+'px'}
+b.hidden=false},900)}
+$('#np').onclick=()=>{$('#np').hidden=true;if(idx>=words.length-1)$('#bk').click();else go(1)};
+/* ---------- quick cheers ---------- */
+const CH=['Brilliant!','Amazing!','Super spelling!','Wow!','Nailed it!','Fantastic!','Spot on!'];let ai=0,mRun=0;
+document.body.insertAdjacentHTML('beforeend','<canvas id="mf"></canvas><div id="mt"></div>');
+function chime(){try{const A=new(window.AudioContext||window.webkitAudioContext)();[784,1175].forEach((f,i)=>{const o=A.createOscillator(),g=A.createGain(),t=A.currentTime+i*.12;o.type='triangle';o.frequency.value=f;o.connect(g);g.connect(A.destination);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.2,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.25);o.start(t);o.stop(t+.3)})}catch(e){}}
+function mini(){const c=$('#mf'),x=c.getContext('2d'),d=devicePixelRatio||1,Wd=innerWidth,Hd=innerHeight,k=ai++%6,rnd=a=>a[Math.random()*a.length|0],R=Math.random,tx=$('#mt'),id=++mRun;
+c.width=Wd*d;c.height=Hd*d;x.setTransform(d,0,0,d,0,0);
+tx.textContent=CH[(ai-1)%CH.length];tx.classList.remove('on');void tx.offsetWidth;tx.classList.add('on');chime();
+if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+let P=[],t=0,rx=0,ry=0;
+const add=o=>P.push({x:0,y:0,vx:0,vy:0,g:0,l:1,dl:.01,sz:30,rot:0,vr:0,sw:0,ph:R()*6,...o});
+const burst=(bx,by)=>{const col=rnd(COL);for(let i=0;i<40;i++){const a=6.283*i/40,s=2+R()*4;add({x:bx,y:by,vx:Math.cos(a)*s,vy:Math.sin(a)*s,g:.08,dl:.015,col,dot:1})}};
+const frame=()=>{if(id!==mRun)return;t++;x.clearRect(0,0,Wd,Hd);
+if(k==0&&t==1)[0,1].forEach(sd=>{for(let i=0;i<60;i++){const a=-(Math.PI*(.25+R()*.2)),s=16+R()*10;add({x:sd?Wd:0,y:Hd,vx:(sd?-1:1)*Math.cos(a)*s,vy:Math.sin(a)*s,g:.35,dl:.008,col:rnd(COL),vr:R()-.5})}});
+if(k==1&&(t==1||t==20||t==40))burst(Wd*(.15+R()*.7),Hd*(.15+R()*.4));
+if(k==2&&t<70&&t%2==0)add({x:R()*Wd,y:-30,vy:3+R()*3,dl:.006,sz:28+R()*24,sw:15,ch:rnd(['⭐','🌟','✨'])});
+if(k==3&&t<40&&t%3==0)add({x:R()*Wd,y:Hd+40,vy:-(3+R()*3),dl:.004,sz:40+R()*30,sw:25,ch:'🎈'});
+if(k==4){if(t<=50){rx=Wd*(.1+.8*t/50);ry=Hd*.9-Hd*.7*t/50;add({x:rx,y:ry,vy:1,g:.05,dl:.05,col:rnd(['#ffc43a','#ff8a3d','#ff4f87']),dot:1});x.font='44px serif';x.textAlign='center';x.fillText('🚀',rx,ry)}if(t==50){burst(rx,ry);burst(rx,ry)}}
+if(k==5&&t<50&&t%3==0)add({x:Wd*(.1+R()*.8),y:Hd*(.2+R()*.6),vy:-.5,dl:.02,sz:24,ch:rnd(['🐶','🦄','🐸','🐼','🐱','🐰','🦊']),grow:1});
+P=P.filter(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.l-=p.dl;if(p.l<=0)return false;x.globalAlpha=Math.min(1,p.l*1.5);
+if(p.ch){x.font=p.sz*(p.grow?1+(1-p.l)*2.5:1)+'px serif';x.textAlign='center';x.fillText(p.ch,p.x+Math.sin(t/20+p.ph)*p.sw,p.y)}
+else{x.fillStyle=p.col;if(p.dot){x.beginPath();x.arc(p.x,p.y,3.5,0,7);x.fill()}else{x.save();x.translate(p.x,p.y);x.rotate(p.rot);x.fillRect(-6,-3,12,6);x.restore()}}
+x.globalAlpha=1;return true});
+if(t<150)requestAnimationFrame(frame);else x.clearRect(0,0,Wd,Hd)};frame()}
+function fanfare(){try{const A=new(window.AudioContext||window.webkitAudioContext)();[523,659,784,1047,784,1047,1319].forEach((f,i)=>{const o=A.createOscillator(),g=A.createGain(),t=A.currentTime+i*.13;o.type='triangle';o.frequency.value=f;o.connect(g);g.connect(A.destination);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.25,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.3);o.start(t);o.stop(t+.35)})}catch(e){}}
+function party(n){const w=$('#win'),c=$('#fx'),x=c.getContext('2d'),d=devicePixelRatio||1,Wd=innerWidth,Hd=innerHeight,rnd=a=>a[Math.random()*a.length|0];
+$('#wb').innerHTML=[...'Perfect score!'].map((ch,i)=>`<span style="color:${COL[i%6]};animation-delay:${i*.07}s">${ch===' '?'&nbsp;':ch}</span>`).join('');
+$('#ws').textContent=`All ${n} ${n==1?'word':'words'} spelled right!`;
+w.hidden=false;c.width=Wd*d;c.height=Hd*d;x.setTransform(d,0,0,d,0,0);fanfare();
+let P=[],t=0,run=!matchMedia('(prefers-reduced-motion:reduce)').matches;
+const burst=(bx,by)=>{const col=rnd(COL);for(let i=0;i<50;i++){const a=Math.PI*2*i/50,s=3+Math.random()*4;P.push({k:'s',x:bx,y:by,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1,col})}};
+for(let i=0;i<3;i++)burst(Wd*(.2+.3*i),Hd*(.2+Math.random()*.2));
+const frame=()=>{if(!run)return;t++;x.clearRect(0,0,Wd,Hd);
+if(t%2==0)P.push({k:'c',x:Math.random()*Wd,y:-20,vx:(Math.random()-.5)*3,vy:2+Math.random()*3,r:Math.random()*6,vr:(Math.random()-.5)*.3,col:rnd(COL)});
+if(t%38==1)burst(Wd*(.12+Math.random()*.76),Hd*(.1+Math.random()*.4));
+if(t%22==0)P.push({k:'e',x:Math.random()*Wd,y:Hd+40,vy:-(2+Math.random()*2),ch:rnd(EM),sz:30+Math.random()*34,ph:Math.random()*6});
+P=P.filter(p=>{if(p.k==='c'){p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.col;x.fillRect(-6,-3,12,6);x.restore();return p.y<Hd+30}
+if(p.k==='s'){p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.vx*=.99;p.l-=.014;x.globalAlpha=Math.max(p.l,0);x.fillStyle=p.col;x.beginPath();x.arc(p.x,p.y,3.5,0,7);x.fill();x.globalAlpha=1;return p.l>0}
+p.y+=p.vy;x.font=p.sz+'px serif';x.textAlign='center';x.fillText(p.ch,p.x+Math.sin(t/20+p.ph)*20,p.y);return p.y>-60});
+requestAnimationFrame(frame)};frame();
+$('#wc').onclick=()=>{run=false;w.hidden=true}}
+/* ---------- spider ---------- */
+const nr=()=>Math.max(22,Math.min(34,Math.min(W,H)/13));
+function scatter(n){const r=nr(),m=r+10,P=[];let md=r*3.6,t=0;
+while(P.length<n){const p={x:m+Math.random()*(W-2*m),y:m+Math.random()*(H-2*m)};
+if(P.every(q=>Math.hypot(q.x-p.x,q.y-p.y)>md)){P.push(p);t=0}else if(++t>150){md*=.92;t=0}}
+return P.map(p=>({x:p.x/W,y:p.y/H}))}
+const np=(s,i)=>({x:s.pts[i].x*W,y:s.pts[i].y*H});
+const nodeAt=(p,s)=>{for(let i=0;i<s.pts.length;i++){const q=np(s,i);if(Math.hypot(q.x-p.x,q.y-p.y)<nr()*1.4)return i}return -1};
+const lc=c=>String(c).toLowerCase();
+function spStep(a,b,s){const n=Math.max(1,Math.ceil(Math.hypot(b.x-a.x,b.y-a.y)/(nr()/2)));
+for(let k=1;k<=n&&!s.won;k++){const q={x:a.x+(b.x-a.x)*k/n,y:a.y+(b.y-a.y)*k/n},h=nodeAt(q,s),pa=s.path;
+if(h<0||pa.includes(h)||lc(s.L[h])!==lc(s.L[pa.length]))continue;
+const f=pa[pa.length-1];s.links.push([f,h]);pa.push(h);s.chain=pa.length;drag.from=h;drag.made++;drag.pts=[np(s,h)];
+if(pa.length===s.L.length){s.won=true;D.add(idx);mini();nextPop();msg('Well done! 🌟',2500);return true}}
+return false}
+
+/* ---------- pointer ---------- */
+const pt=e=>{const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}};
+function seg(a,b,c,w){ctx.strokeStyle=c;ctx.lineWidth=w;ctx.lineCap=ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}
+cv.onpointerdown=e=>{if(!e.isPrimary||T())return;e.preventDefault();cv.setPointerCapture(e.pointerId);const p=pt(e),s=getSt();
+if(markMode&&mode==='test'){const n=per(),sp=ROW(),k=Math.floor(p.y/sp),i=k;if(p.x>W-110&&k>=0&&k<n&&i<words.length){MK.has(i)?MK.delete(i):MK.add(i);draw()}return}
+if(mode==='spider'){if(s.won)return;const h=nodeAt(p,s),pa=s.path;
+const ok=pa.length?h===pa[pa.length-1]:(h>=0&&lc(s.L[h])===lc(s.L[0]));
+if(!ok){msg(pa.length?'Carry on from the last letter you joined':'Start on the first letter');return}
+if(!pa.length){pa.push(h);s.chain=1}
+drag={pts:[np(s,h)],from:h,made:0}}else drag={pts:[p]}};
+cv.onpointermove=e=>{if(!drag||!e.isPrimary)return;const p=pt(e),a=drag.pts[drag.pts.length-1];drag.pts.push(p);
+if(mode==='spider'){if(spStep(a,p,getSt())){drag=null;render();return}draw()}else seg(a,p,css('--ink'),4.5)};
+cv.onpointerup=cv.onpointercancel=e=>{if(!drag)return;const s=getSt();
+if(mode==='spider'){if(!drag.made&&drag.pts.length>3&&!s.won)msg('Not quite. Find the next letter in the word')}
+else s.strokes.push(drag.pts);
+drag=null;draw()};
+
+/* ---------- drawing ---------- */
+function stroke(pts,c,w){if(pts.length==1)pts=[pts[0],{x:pts[0].x+.1,y:pts[0].y}];ctx.strokeStyle=c;ctx.lineWidth=w;ctx.lineCap=ctx.lineJoin='round';ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke()}
+function draw(){ctx.clearRect(0,0,W,CVH);if(mode==='match')return;const s=getSt(),ink=css('--ink'),pink=css('--pink'),teal=css('--teal'),card=css('--card');
+if(mode==='spider'){const r=nr(),pa=s.path,st=pa.length?pa[pa.length-1]:-1,l0=lc(s.L[0]),nl=pa.length<s.L.length?lc(s.L[pa.length]):'';
+s.links.forEach(([a,b])=>seg(np(s,a),np(s,b),teal,7));
+if(drag)stroke(drag.pts,pink,6);
+ctx.textAlign='center';ctx.textBaseline='middle';
+s.pts.forEach((_,i)=>{const q=np(s,i),on=pa.includes(i);
+const solid=pa.length?i===st:lc(s.L[i])===l0,dash=!on&&s.hint&&pa.length&&lc(s.L[i])===nl;
+if(!s.won&&(solid||dash)){ctx.beginPath();ctx.arc(q.x,q.y,r+7,0,7);ctx.strokeStyle=pink;ctx.lineWidth=4;ctx.setLineDash(solid?[]:[6,5]);ctx.stroke();ctx.setLineDash([])}
+ctx.beginPath();ctx.arc(q.x,q.y,r,0,7);ctx.fillStyle=on?teal:card;ctx.fill();ctx.lineWidth=3;ctx.strokeStyle=ink;ctx.stroke();
+ctx.fillStyle=on?'#fff':ink;ctx.font=FONT(r*1.15);ctx.fillText(s.L[i].toLowerCase(),q.x,q.y+2)});return}
+if(mode==='box'){const L=letters(words[idx]),n=L.length,w=Math.min(96,(W-32)/n),u=w*.5,x0=(W-n*w)/2,base=T()?3*u+16:(H-4*u)/2+3*u;
+L.forEach((c,i)=>{const k=kind(c),x=x0+i*w+4,bw=w-8,top=base-(k==='t'?3:2)*u,bot=base+(k==='l'?u:0);
+ctx.beginPath();(ctx.roundRect||ctx.rect).call(ctx,x,top,bw,bot-top,10);ctx.fillStyle=card;ctx.fill();ctx.lineWidth=3;ctx.strokeStyle=ink;ctx.stroke();
+const tc=T()?((TX[mode+idx]||'')[i]||''):'',bad=T()&&s.reveal&&tc!==c;
+if(T()&&s.reveal){ctx.lineWidth=5;ctx.strokeStyle=bad?pink:teal;ctx.stroke()}
+ctx.textAlign='center';
+if(tc){ctx.fillStyle=T()&&s.reveal?(bad?pink:teal):ink;ctx.font=FONT(u*3.2);ctx.textBaseline='alphabetic';ctx.fillText(tc,x+bw/2,base-u*.3)}
+if(bad){ctx.fillStyle=teal;ctx.font=FONT(u*1.8);ctx.textBaseline='alphabetic';ctx.fillText(c,x+bw/2,base+u*2.6)}
+else if(s.reveal&&!T()){ctx.globalAlpha=.4;ctx.fillStyle=teal;ctx.font=FONT((bot-top)*.8);ctx.textBaseline='middle';ctx.fillText(c,x+bw/2,(top+bot)/2);ctx.globalAlpha=1}});
+ctx.setLineDash([8,6]);seg({x:8,y:base},{x:W-8,y:base},pink,2);ctx.setLineDash([])}
+else{const p=per(),sp=ROW(),pg=0;ctx.textBaseline='alphabetic';
+for(let k=0;k<p;k++){const i=pg*p+k;if(i>=words.length)break;const y=sp*(k+1)-sp*.25;
+ctx.textAlign='left';ctx.fillStyle=i===idx?pink:ink;ctx.font=FONT(20);ctx.fillText((i+1)+'.',14,y);
+seg({x:54,y},{x:W-16,y},ink,2.5);ctx.globalAlpha=.3;ctx.setLineDash([6,6]);seg({x:54,y:y-sp*.28},{x:W-16,y:y-sp*.28},ink,1.5);ctx.setLineDash([]);ctx.globalAlpha=1;
+const tt=T()?(TX[mode+i]||'').trim():'',good=tt===words[i];
+if(tt){ctx.fillStyle=T()&&s.reveal?(good?teal:pink):ink;ctx.font=FONT(30);ctx.textAlign='left';ctx.fillText(tt,60,y-4)}
+if(T()&&s.reveal){ctx.font=FONT(26);ctx.textAlign='right';ctx.fillStyle=good?teal:pink;ctx.fillText(good?'✓':'✗',W-20,y-6)}
+if(markMode&&!T()){const bx=W-52,by=y-26,bs=36,on=MK.has(i);ctx.lineWidth=3;ctx.strokeStyle=ink;ctx.fillStyle=on?teal:card;ctx.beginPath();(ctx.roundRect||ctx.rect).call(ctx,bx,by,bs,bs,8);ctx.fill();ctx.stroke();
+if(on){ctx.strokeStyle='#fff';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(bx+8,by+19);ctx.lineTo(bx+15,by+27);ctx.lineTo(bx+28,by+10);ctx.stroke()}
+ctx.fillStyle=teal;ctx.font=FONT(15);ctx.textAlign='left';ctx.fillText(words[i],60,y+16)}
+if(!markMode&&s.reveal&&(!T()||!good)){ctx.fillStyle=teal;ctx.font=FONT(15);ctx.textAlign='right';ctx.fillText(words[i],W-18,y+16)}}}
+s.strokes.forEach(q=>stroke(q,ink,4.5))}
+</script>
+</body></html>
