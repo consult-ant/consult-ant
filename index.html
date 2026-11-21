@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>consult-ant — Portfolio</title>
   <meta name="description" content="A portfolio of data visualisations, web apps and games by consult-ant.">
+  <link rel="icon" type="image/svg+xml" href="ap-monogram-parametric-slice.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -13,7 +14,7 @@
 <body>
   <header class="site-header">
     <div class="wrap header-inner">
-      <a class="brand" href="index.html">consult-ant</a>
+      <a class="brand" href="index.html"><img class="brand-icon" src="ap-monogram-parametric-slice.svg" alt="">consult-ant</a>
       <nav aria-label="Main navigation">
         <a href="visuals/">Data Visualisations</a>
         <a href="#looker">Looker</a>
@@ -39,14 +40,15 @@
       </a>
     </section>
 
-    <section class="latest-post" aria-labelledby="latest-post-title">
+    <section class="latest-post" aria-labelledby="latest-content-title">
+      <h2 id="latest-content-title">Latest Content</h2>
       <a class="latest-post-link" href="looker/comic_book/index.html" aria-label="Open the latest post: Looker Comic Book">
-        <figure class="latest-post-thumb" aria-hidden="true">
+        <figure class="thumb gif-thumb latest-post-thumb" aria-hidden="true">
           <img src="looker/comic_book/LookerComicBook.gif" alt="">
         </figure>
         <div class="latest-post-copy">
-          <p class="eyebrow">Latest post</p>
-          <h2 id="latest-post-title">Looker Comic Book</h2>
+          <p class="card-kicker">Looker project</p>
+          <h3>Looker Comic Book</h3>
           <p>An animated Looker project presentation.</p>
           <span class="latest-post-action">View latest post <span aria-hidden="true">→</span></span>
         </div>
