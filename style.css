@@ -42,7 +42,7 @@ a { color: inherit; }
 .site-header { padding: 1.35rem 0; border-bottom: 1px solid var(--grid); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
 .brand { display: flex; align-items: center; gap: .55rem; font: 700 1.2rem var(--head); text-decoration: none; white-space: nowrap; }
-.brand-icon { display: block; width: 1.75rem; height: 1.75rem; padding: .18rem; border-radius: .3rem; background: var(--ink); object-fit: contain; }
+.brand-icon { display: block; flex: 0 0 32px; width: 32px; height: 32px; padding: .2rem; border-radius: 8px; background: #1c1c22; object-fit: contain; }
 nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .35rem 1.2rem; }
 nav a { color: var(--muted); font-size: .95rem; text-decoration: none; }
 nav a:hover, nav a[aria-current="page"] { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
