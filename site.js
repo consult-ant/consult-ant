@@ -37,6 +37,35 @@
         const opacity = (0.12 + random() * 0.88).toFixed(2);
         markup += `<rect x="${30 + col * 31}" y="${28 + row * 30}" width="${cellWidth}" height="${cellHeight}" rx="3" fill="${colors.sage}" opacity="${opacity}"/>`;
       }
+    } else if (type === 'coffee') {
+      markup += `<rect x="24" y="20" width="452" height="260" rx="18" fill="#efe3d2"/>`;
+      markup += `<text x="48" y="55" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#5b3b22">COFFEE IMPORTS · 2015–2019</text>`;
+      markup += `<rect x="48" y="72" width="190" height="122" rx="8" fill="#654321"/>`;
+      markup += `<rect x="242" y="72" width="104" height="74" rx="8" fill="#8a6038"/>`;
+      markup += `<rect x="350" y="72" width="102" height="74" rx="8" fill="#a87b4e"/>`;
+      markup += `<rect x="242" y="152" width="98" height="92" rx="8" fill="#b38a58"/>`;
+      markup += `<rect x="344" y="152" width="108" height="92" rx="8" fill="#795333"/>`;
+      markup += `<rect x="48" y="202" width="92" height="42" rx="7" fill="#9a7047"/>`;
+      markup += `<rect x="146" y="202" width="86" height="42" rx="7" fill="#c19a70"/>`;
+    } else if (type === 'cowbell') {
+      markup += `<rect x="24" y="20" width="452" height="260" rx="18" fill="#fff3d4"/>`;
+      markup += `<path d="M222 74h56l25 120H197z" fill="#c9811b" stroke="#57340f" stroke-width="8" stroke-linejoin="round"/>`;
+      markup += `<rect x="235" y="52" width="30" height="26" rx="7" fill="#c9811b" stroke="#57340f" stroke-width="7"/>`;
+      markup += `<path d="M215 96l-12 75" stroke="#fff" stroke-opacity=".55" stroke-width="8" stroke-linecap="round"/>`;
+      markup += `<ellipse cx="250" cy="197" rx="37" ry="8" fill="#57340f"/>`;
+      markup += `<text x="135" y="250" text-anchor="middle" font-family="Arial,sans-serif" font-size="31" font-weight="700" fill="#d6361f">659</text>`;
+      markup += `<text x="135" y="269" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#7a6548">SONGS</text>`;
+      markup += `<text x="365" y="250" text-anchor="middle" font-family="Arial,sans-serif" font-size="31" font-weight="700" fill="#d6361f">450</text>`;
+      markup += `<text x="365" y="269" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#7a6548">ARTISTS</text>`;
+    } else if (type === 'turkey') {
+      markup += `<rect x="24" y="20" width="452" height="260" rx="18" fill="#f7efe0"/>`;
+      markup += `<rect x="24" y="20" width="452" height="68" rx="18" fill="#1f4d3a"/>`;
+      markup += `<text x="48" y="64" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#e8a317">MINNESOTA TURKEY FACT SHEET</text>`;
+      markup += `<text x="52" y="186" font-family="Arial,sans-serif" font-size="96" font-weight="700" fill="#b5400f">#1</text>`;
+      markup += `<text x="58" y="218" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#5a4636">39 MILLION BIRDS IN 2023</text>`;
+      markup += `<rect x="278" y="128" width="148" height="28" rx="6" fill="#b5400f"/>`;
+      markup += `<rect x="278" y="168" width="119" height="28" rx="6" fill="#e8a317"/>`;
+      markup += `<rect x="278" y="208" width="82" height="28" rx="6" fill="#1f4d3a"/>`;
     } else if (type === 'app') {
       markup += `<rect x="28" y="24" width="444" height="252" rx="12" fill="${colors.panel}"/>`;
       markup += `<rect x="28" y="24" width="444" height="40" rx="12" fill="${colors.blue}"/>`;

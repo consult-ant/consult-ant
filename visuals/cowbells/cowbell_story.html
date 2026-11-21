@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Cowbell Chronicles</title>
+<style>
+:root{--bg:#fff6dc;--bg2:#ffe7a8;--ink:#2b1a0a;--bell:#c9811b;--hot:#d6361f;--mute:#7a6548;--dim:#e3d2a2;box-sizing:border-box}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1409;--bg2:#3a2610;--ink:#fbecc8;--bell:#f0a63a;--hot:#ff6a4d;--mute:#bfa57a;--dim:#4a3517}}
+:root[data-theme="dark"]{--bg:#1d1409;--bg2:#3a2610;--ink:#fbecc8;--bell:#f0a63a;--hot:#ff6a4d;--mute:#bfa57a;--dim:#4a3517}
+*{box-sizing:border-box}
+html{scroll-snap-type:y proximity;scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Verdana,sans-serif}
+section{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(56px + env(safe-area-inset-top,0px)) 20px calc(40px + env(safe-area-inset-bottom,0px));scroll-snap-align:start;position:relative;overflow:hidden}
+section:nth-of-type(even){background:linear-gradient(var(--bg),var(--bg2))}
+h1,h2,.num{font-family:Impact,"Arial Black",sans-serif;font-weight:400;text-transform:uppercase;line-height:1;margin:.2em 0}
+h1{font-size:clamp(40px,12vw,84px)}h2{font-size:clamp(28px,8vw,48px)}
+.num{font-size:clamp(70px,24vw,170px);color:var(--hot)}
+em{color:var(--hot);font-style:normal}p{max-width:520px;color:var(--mute);margin:.4em 0;font-size:16px}
+svg.b{color:var(--bell);display:block}
+#bar{position:fixed;top:0;left:0;right:0;z-index:9;display:flex;justify-content:center;gap:8px;padding:calc(8px + env(safe-area-inset-top,0px)) 10px 8px;background:var(--bg);border-bottom:2px solid var(--ink)}
+#bar svg{width:22px;height:22px;color:var(--dim);cursor:pointer;transition:.3s}
+#bar svg.on{color:var(--bell);transform:scale(1.25) rotate(-12deg)}
+#snd{position:fixed;right:10px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9;border:2px solid var(--ink);background:var(--bell);color:#2b1a0a;font-weight:700;border-radius:20px;padding:8px 14px;cursor:pointer}
+.sw{transform-origin:50% 6%;animation:sw 2.4s ease-in-out infinite}
+@keyframes sw{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+.hint{animation:bob 1.4s ease-in-out infinite;margin-top:18px;font-weight:700;color:var(--ink)}
+@keyframes bob{50%{transform:translateY(8px)}}
+.fall{position:absolute;top:-60px;opacity:.5;animation:fl linear infinite;pointer-events:none}
+@keyframes fl{to{transform:translateY(115vh) rotate(40deg)}}
+.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;width:min(360px,90vw);margin:14px 0}
+.grid svg{width:100%;color:var(--dim);transition:color .3s,transform .3s;transform:scale(.8)}
+.grid svg.lit{color:var(--bell);transform:scale(1)}
+.hof{width:min(520px,94vw);text-align:left}
+.hr{display:flex;align-items:center;gap:6px;margin:5px 0;cursor:pointer}
+.hr b{width:92px;font-size:13px;flex:none}.hr i{font-style:normal;font-weight:700;color:var(--hot);margin-left:4px}
+.hr .bs{display:flex;flex-wrap:wrap;align-items:center}
+.hr svg{width:22px;height:22px;color:var(--bell);opacity:0;transform:scale(0) rotate(-90deg);transition:all .4s cubic-bezier(.3,1.6,.5,1);transition-delay:calc(var(--d)*70ms + var(--r)*60ms)}
+.in .hr svg{opacity:1;transform:none}
+.vs{display:flex;align-items:flex-end;justify-content:center;gap:28px;margin:16px 0}
+.vs div{text-align:center}.vs svg{transition:width 1.6s cubic-bezier(.3,1.4,.5,1);width:20px}
+.vs b{display:block;font-family:Impact,sans-serif;font-weight:400;font-size:32px;color:var(--hot)}
+.six{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;width:min(480px,94vw);margin-top:14px}
+.six div{font-size:12px;font-weight:700;opacity:0;transform:translateY(30px);transition:all .6s;transition-delay:calc(var(--d)*180ms)}
+.in .six div{opacity:1;transform:none}.six svg{width:56px;margin:0 auto 4px}.in .six svg{animation:sw 1s ease-in-out calc(var(--d)*.18s) 3}
+.pills{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:16px}
+.pills span{border:3px solid var(--ink);border-radius:24px;padding:8px 14px;background:var(--dim);font-weight:700;transition:all .5s;transition-delay:calc(var(--d)*350ms);transform:scale(.6);opacity:.3}
+.in .pills span{background:var(--bell);color:#2b1a0a;transform:none;opacity:1}
+.in .pills span:before{content:"\2713  "}
+.fade>*{opacity:0;transform:translateY(24px);transition:all .7s}.fade.in>*{opacity:1;transform:none}.fade.in>*:nth-child(2){transition-delay:.15s}.fade.in>*:nth-child(3){transition-delay:.3s}.fade.in>*:nth-child(4){transition-delay:.45s}
+.btn{margin-top:14px;border:3px solid var(--ink);background:var(--hot);color:#fff;font-weight:700;font-size:16px;border-radius:26px;padding:10px 20px;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.sw,.hint,.fall,.in .six svg{animation:none}*{transition:none!important}}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs><symbol id="cb" viewBox="0 0 40 40"><rect x="15" y="2" width="10" height="6" rx="2" fill="currentColor" stroke="#2b1a0a" stroke-width="2"/><path d="M11 8h18l7 26H4z" fill="currentColor" stroke="#2b1a0a" stroke-width="2.4" stroke-linejoin="round"/><path d="M14 12l-4 18" stroke="#fff" stroke-opacity=".5" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="20" cy="34" rx="16" ry="3" fill="#2b1a0a"/><circle cx="20" cy="36.5" r="2.6" fill="#8a4f0c" stroke="#2b1a0a" stroke-width="1.2"/></symbol></defs></svg>
+<div id="bar"></div><button id="snd">🔇 Sound off</button>
+
+<section id="s0"><div id="rain"></div><svg class="b sw" width="170" height="170" viewBox="0 0 40 40" id="hero"><use href="#cb"/></svg>
+<h1>The <em>Cowbell</em> Chronicles</h1><p>Music Marathon 2026 · Week 40. A scroll through 659 songs that all needed a little more bell.</p><div class="hint">scroll to ring ↓</div></section>
+
+<section class="fade" id="s1"><p>Week 40 delivered…</p><div class="num" id="c1">0</div><h2>songs</h2><p>…by 450 artists. Two exact duplicates were removed. Nobody is judging.</p></section>
+
+<section class="fade" id="s2"><h2>The <em>one-hit</em> wonders</h2><p>Out of every 100 artists, 76 got exactly one song.</p><div class="grid" id="g"></div><p>342 of 450 artists, to be exact.</p></section>
+
+<section id="s3"><h2>Cowbell <em>Hall of Fame</em></h2><p>One bell per song. Tap a row to ring it.</p><div class="hof" id="hof"></div></section>
+
+<section class="fade" id="s4"><h2><em>Love</em> beats rock</h2><p>Title word counts, as bell sizes:</p><div class="vs"><div><svg class="b" id="v1" viewBox="0 0 40 40"><use href="#cb"/></svg><b>35</b>love</div><div><svg class="b" id="v2" viewBox="0 0 40 40"><use href="#cb"/></svg><b>15</b>rock</div></div><p>Love shows up 2.3× as often as rock. The cowbell is a romantic.</p></section>
+
+<section id="s5"><h2>Only <em>six</em> titles say it out loud</h2><div class="six" id="six"></div></section>
+
+<section class="fade" id="s6"><h2>The <em>canon</em>, checked</h2><p>The legendary cowbell tracks, all present:</p><div class="pills" id="pl"></div></section>
+
+<section class="fade" id="s7"><svg class="b sw" width="150" height="150" viewBox="0 0 40 40"><use href="#cb"/></svg><h1>I got a <em>fever</em></h1><p>Kiss led with 9 songs. Britney matched the Stones at 4. And the prescription is, as always…</p><button class="btn" id="mb">More cowbell!</button></section>
+
+<script>
+var $=function(i){return document.getElementById(i)},ac=null,on=false;
+var bell=function(c){return '<svg class="b '+(c||"")+'" viewBox="0 0 40 40"><use href="#cb"/></svg>'};
+function ring(f){if(!on)return;try{var t=ac.currentTime,g=ac.createGain(),p=ac.createBiquadFilter();p.type="bandpass";p.frequency.value=f*1.6;g.gain.setValueAtTime(.45,t);g.gain.exponentialRampToValueAtTime(.001,t+.45);[f,f*1.504].forEach(function(x){var o=ac.createOscillator();o.type="square";o.frequency.value=x;o.connect(p);o.start(t);o.stop(t+.5)});p.connect(g);g.connect(ac.destination)}catch(e){}}
+$("snd").onclick=function(){on=!on;if(on){ac=ac||new (window.AudioContext||window.webkitAudioContext)();ring(560)}this.textContent=on?"🔔 Sound on":"🔇 Sound off"};
+$("hero").onclick=function(){ring(560)};$("mb").onclick=function(){ring(560);setTimeout(function(){ring(700)},180);setTimeout(function(){ring(840)},360)};
+var r="";for(var i=0;i<14;i++)r+='<svg class="b fall" style="left:'+(i*7.5)+'%;width:'+(18+i%4*8)+'px;animation-duration:'+(6+i%5*2)+'s;animation-delay:-'+(i*1.3)+'s" viewBox="0 0 40 40"><use href="#cb"/></svg>';$("rain").innerHTML=r;
+var secs=document.querySelectorAll("section"),bar=$("bar"),bb="";secs.forEach(function(s,i){bb+='<svg data-i="'+i+'" viewBox="0 0 40 40"><use href="#cb"/></svg>'});bar.innerHTML=bb;
+bar.onclick=function(e){var s=e.target.closest("svg");if(s)secs[s.dataset.i].scrollIntoView()};
+var g="";for(var i=0;i<100;i++)g+=bell();$("g").innerHTML=g;
+var A=[["Kiss",9],["Beatles",8],["Rush",7],["Allman Bros.",7],["Guns N’ Roses",6],["Led Zeppelin",6],["Queen",6],["Van Halen",6],["Donnas",5],["Jimi Hendrix",5],["Prince",5]];
+$("hof").innerHTML=A.map(function(a,k){var s="";for(var j=0;j<a[1];j++)s+='<svg class="b" style="--r:'+j+'" viewBox="0 0 40 40"><use href="#cb"/></svg>';return '<div class="hr" style="--d:'+k+'" data-k="'+k+'"><b>'+a[0]+'</b><div class="bs">'+s+'<i>'+a[1]+'</i></div></div>'}).join("");
+$("hof").onclick=function(e){var h=e.target.closest(".hr");if(h)ring(420+h.dataset.k*45)};
+var T=["Hell’s Bells","For Whom the Bell Tolls","Rock the Bells","Cowbell Polka","808 cowbell (e.p.)","I’ve Got a Fever! (Cowbell Remix)"];
+$("six").innerHTML=T.map(function(t,i){return '<div style="--d:'+i+'">'+bell()+t+'</div>'}).join("");
+$("pl").innerHTML=["Don’t Fear the Reaper","Mississippi Queen","Honky Tonk Woman","Sweet Emotion"].map(function(t,i){return '<span style="--d:'+i+'">'+t+'</span>'}).join("");
+function run(id){if(id==="s1"){var n=0,t=setInterval(function(){n=Math.min(659,n+13);$("c1").textContent=n;if(n>=659)clearInterval(t)},22)}
+if(id==="s2"){var s=document.querySelectorAll("#g svg");s.forEach(function(x,i){setTimeout(function(){if(i<76)x.classList.add("lit");if(i%19===0)ring(500+i*3)},i*30)})}
+if(id==="s4"){setTimeout(function(){$("v1").style.width="130px";$("v2").style.width="56px";ring(450);setTimeout(function(){ring(800)},300)},300)}
+if(id==="s6"){[0,1,2,3].forEach(function(i){setTimeout(function(){ring(520+i*110)},i*350+300)})}
+if(id==="s5"){T.forEach(function(t,i){setTimeout(function(){ring(600+i*70)},i*180+200)})}}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var s=e.target,i=[].indexOf.call(secs,s);if(!s.classList.contains("in")){s.classList.add("in");run(s.id)}bar.querySelectorAll("svg").forEach(function(b,j){b.classList.toggle("on",j<=i)});if(i===0||i===7)ring(560)}})},{threshold:.55});
+secs.forEach(function(s){io.observe(s)});
+</script></body></html>

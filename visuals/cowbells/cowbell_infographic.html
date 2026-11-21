@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MM2026 Week 40: The Great Cowbell Census</title>
+<style>
+:root{--bg:#fff6dc;--ink:#2b1a0a;--card:#fffdf4;--bell:#c9811b;--bell2:#8a4f0c;--hot:#d6361f;--mute:#7a6548;--line:#e6d3a3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1409;--ink:#fbecc8;--card:#2a1d0d;--bell:#f0a63a;--bell2:#b9741b;--hot:#ff6a4d;--mute:#bfa57a;--line:#4a3517}}
+:root[data-theme="dark"]{--bg:#1d1409;--ink:#fbecc8;--card:#2a1d0d;--bell:#f0a63a;--bell2:#b9741b;--hot:#ff6a4d;--mute:#bfa57a;--line:#4a3517}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Verdana,sans-serif;line-height:1.4}
+.w{max-width:760px;margin:0 auto;padding:16px}
+header{text-align:center;padding:12px 0 6px}
+.hero{width:150px;height:150px;animation:sw 2.2s ease-in-out infinite;transform-origin:50% 8%}
+@keyframes sw{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(9deg)}}
+@media (prefers-reduced-motion:reduce){.hero{animation:none}}
+h1{font-family:Impact,"Arial Black",sans-serif;font-size:clamp(34px,9vw,60px);line-height:1;margin:6px 0;text-transform:uppercase;letter-spacing:1px}
+h1 em{color:var(--hot);font-style:normal}
+.sub{color:var(--mute);margin:0}
+.sec{background:var(--card);border:3px solid var(--ink);border-radius:18px;padding:16px;margin:18px 0;box-shadow:5px 5px 0 var(--bell2)}
+h2{font-family:Impact,"Arial Black",sans-serif;font-weight:400;text-transform:uppercase;font-size:24px;margin:0 0 4px}
+.cap{color:var(--mute);font-size:13px;margin:0 0 12px}
+.big{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.big div{text-align:center;border:2px dashed var(--bell2);border-radius:14px;padding:10px 4px}
+.big b{display:block;font-family:Impact,"Arial Black",sans-serif;font-size:clamp(28px,8vw,44px);color:var(--hot);font-weight:400}
+.big span{font-size:12px;color:var(--mute)}
+.row{display:flex;align-items:center;gap:8px;margin:5px 0}
+.row .n{width:104px;font-size:13px;font-weight:700;flex:none}
+.row .b{display:flex;flex-wrap:wrap;gap:1px;align-items:center}
+.row .b svg{width:24px;height:24px;color:var(--bell)}
+.row .c{font-weight:700;color:var(--hot);margin-left:4px;font-size:14px}
+.words{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:flex-end;justify-content:center}
+.wd{text-align:center}
+.wd svg{color:var(--bell);display:block;margin:0 auto}
+.wd b{display:block;font-size:13px}.wd i{font-style:normal;color:var(--hot);font-weight:700;font-size:12px}
+.facts{display:grid;gap:10px}
+.f{display:flex;gap:12px;align-items:flex-start;border-top:2px dotted var(--line);padding-top:10px}
+.f:first-child{border:0;padding:0}
+.f svg{width:34px;height:34px;flex:none;color:var(--bell)}
+.f p{margin:0;font-size:14px}.f strong{color:var(--hot)}
+.meter{height:26px;background:var(--line);border-radius:13px;overflow:hidden;display:flex;border:2px solid var(--ink)}
+.meter span{display:block;height:100%}
+.leg{display:flex;justify-content:space-between;font-size:12px;margin-top:6px;color:var(--mute)}
+.canon{display:flex;flex-wrap:wrap;gap:8px}
+.canon span{border:2px solid var(--ink);border-radius:20px;padding:4px 10px;font-size:13px;background:var(--bell);color:#2b1a0a;font-weight:700}
+.hb{background:none;border:0;padding:0;cursor:pointer}.hb.r .hero{animation:sw .3s ease-in-out 3}
+.ar{border-radius:10px;cursor:pointer}.ar:hover,.ar:focus-visible{background:var(--line);outline:0}
+.ar .row .n:after{content:" ▾";color:var(--hot)}.ar.open .row .n:after{content:" ▴"}
+.sl{display:none;margin:2px 0 8px 112px;padding:8px 10px;border-left:4px solid var(--bell);font-size:13px}.ar.open .sl{display:block}.sl li{margin:2px 0}.sl ul{margin:0;padding-left:16px}
+.wd{cursor:pointer;user-select:none}.wd.on svg{animation:sw .35s ease-in-out 2}
+#cnt{font-weight:700;color:var(--hot);min-height:1.4em;margin-top:6px}
+footer{text-align:center;color:var(--mute);font-size:12px;padding:6px 0 18px}
+</style></head><body><div class="w">
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="cb" viewBox="0 0 40 40"><rect x="15" y="2" width="10" height="6" rx="2" fill="currentColor" stroke="#2b1a0a" stroke-width="2"/><path d="M11 8h18l7 26H4z" fill="currentColor" stroke="#2b1a0a" stroke-width="2.4" stroke-linejoin="round"/><path d="M14 12l-4 18" stroke="#fff" stroke-opacity=".5" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="20" cy="34" rx="16" ry="3" fill="#2b1a0a"/><circle cx="20" cy="36.5" r="2.6" fill="#8a4f0c" stroke="#2b1a0a" stroke-width="1.2"/></symbol></defs></svg>
+
+<header>
+<button class="hb" id="hb" aria-label="Ring the cowbell"><svg class="hero" viewBox="0 0 40 40"><use href="#cb" style="color:var(--bell)"/></svg></button>
+<h1>The Great <em>Cowbell</em> Census</h1>
+<p class="sub">Music Marathon 2026 · Week 40 · I’ve got a fever, and the only prescription…</p>
+<p class="sub" id="cnt">👆 Tap the bell. Tap an artist. Tap a word.</p>
+</header>
+
+<div class="sec"><div class="big">
+<div><b>659</b><span>unique songs</span></div>
+<div><b>450</b><span>different artists</span></div>
+<div><b>76%</b><span>of artists played just once</span></div>
+</div></div>
+
+<div class="sec"><h2>Cowbell Hall of Fame</h2>
+<p class="cap">Most-played artists. One bell = one song. Tap a row to see the songs.</p>
+<div id="art"></div></div>
+
+<div class="sec"><h2>Words that clang loudest</h2>
+<p class="cap">Most common words in song titles. Bigger bell, bigger bang.</p>
+<div class="words" id="wd"></div></div>
+
+<div class="sec"><h2>Title length: short &amp; punchy</h2>
+<p class="cap">Share of titles by word count</p>
+<div class="meter"><span style="width:46%;background:var(--hot)"></span><span style="width:54%;background:var(--bell)"></span></div>
+<div class="leg"><span>46% have 1–2 words</span><span>54% have 3+</span></div></div>
+
+<div class="sec"><h2>Bell-ringing insights</h2><div class="facts">
+<div class="f"><svg><use href="#cb"/></svg><p><strong>Love beats rock.</strong> “Love” appears in 35 titles, 2.3× as many as “rock” (15). The cowbell is apparently a romantic.</p></div>
+<div class="f"><svg><use href="#cb"/></svg><p><strong>A long tail of one-offs.</strong> 342 of 450 artists got a single song. The big names (Kiss, Beatles, Rush) are the exception, not the rule.</p></div>
+<div class="f"><svg><use href="#cb"/></svg><p><strong>Kiss top the list</strong> with 9 songs, from “Rock and Roll All Night” to “I Think I’m Going Bald”.</p></div>
+<div class="f"><svg><use href="#cb"/></svg><p><strong>Britney Spears ties the Rolling Stones</strong> at 4 songs each. Hit it, baby, one more time.</p></div>
+<div class="f"><svg><use href="#cb"/></svg><p><strong>Only 6 titles mention bells:</strong> Hell’s Bells, For Whom the Bell Tolls, Rock the Bells, Cowbell Polka, 808 cowbell (e.p.), and a Cowbell Remix of “I’ve Got a Fever!”.</p></div>
+<div class="f"><svg><use href="#cb"/></svg><p><strong>Longest title:</strong> a Beatles track at 57 characters (“…Something To Hide Except Me And My Monkey”). <strong>Shortest:</strong> Duran Duran’s “Rio”, at 3.</p></div>
+<div class="f"><svg><use href="#cb"/></svg><p><strong>Alphabet bias:</strong> artist names starting with B (69), S (61) and D (52) lead the pack.</p></div>
+</div></div>
+
+<div class="sec"><h2>The Canon, checked</h2>
+<p class="cap">The legendary cowbell tracks, all present and correct</p>
+<div class="canon"><span>Don’t Fear the Reaper</span><span>Mississippi Queen</span><span>Honky Tonk Woman</span><span>Sweet Emotion</span></div></div>
+
+<footer>Source: MM2026_wk40.xlsx · 661 rows, 2 exact duplicates removed (Donald Fagen, Turtles) · artist spellings merged where obvious (e.g. BTO, B-52s, Guns n Roses)</footer>
+</div>
+<script>
+var A=[["Kiss",9],["Beatles",8],["Rush",7],["Allman Bros.",7],["Guns N’ Roses",6],["Led Zeppelin",6],["Queen",6],["Van Halen",6],["Donnas",5],["Jimi Hendrix",5],["Prince",5]];
+var W=[["love",35],["rock",15],["time",10],["life",8],["night",8],["fire",8],["man",8],["way",7]];
+var bell=function(s){return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 40 40"><use href="#cb"/></svg>'};
+var S=[["Calling Dr. Love","All the Way","Firehouse","Ladies Room","The Oath","Dark Light","Rock and Roll All Night","Mainline","Love Her All I Can"],["Everybody’s Got Something To Hide Except Me And My Monkey","Hard Days Night","Helter Skelter","Taxman","Drive My Car","You Can’t Do That","I Call Your Name","Revolution"],["Big Money","In The Mood","Witch Hunt","Limelight","Trees","I Think I’m Going Bald","Xanadu"],["South Bound","Dreams","Don’t Keep Me Wonderin","Ramblin’ Man","In Memory of Elizabeth Reed (live)","Into the Mistic (live)","Rickin’ Horse"],["Nightrain","Bad Obsession","Mr. Brownstone","Think About You","Welcome to the Jungle","It’s So Easy"],["Good Times, Bad Times","Stairway to Heaven","Kashmir","Moby Dick","Houses of the Holy","Bring it on Home"],["We Will Rock You","Keep Yourself Alive","Bohemian Rhapsody","Crazy Little Thing Called Love","Liar","Who Needs You"],["Drop Dead Legs","Dance the Night Away","Dancing In the Street","Jump","Black and Blue","Tora Tora Loss of Control"],["You Wanna Get Me High","On the Rocks","Who Invited You","Well Done","Hook it Up"],["Fire","Purple Haze","Stone Free","Dolly Dagger","EZ Ryder"],["Life Can Be So Nice","You Got The Look","Endorphinmachine","Cream","Little Red Corvette"]];
+var M=["Ding!","Ding-dong!","Keep going…","That’s the stuff.","More cowbell!","You’re a natural.","Fever rising…","Fever: 101°.","Doctor says: more cowbell.","Prescription filled. 🔔"];
+var n=0,ac=null;
+function ring(f){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();var t=ac.currentTime,g=ac.createGain(),bp=ac.createBiquadFilter();bp.type="bandpass";bp.frequency.value=f*1.6;g.gain.setValueAtTime(.5,t);g.gain.exponentialRampToValueAtTime(.001,t+.45);[f,f*1.504].forEach(function(x){var o=ac.createOscillator();o.type="square";o.frequency.value=x;o.connect(bp);o.start(t);o.stop(t+.5)});bp.connect(g);g.connect(ac.destination)}catch(e){}
+n++;document.getElementById("cnt").textContent="🔔 "+n+" · "+M[Math.min(M.length-1,Math.floor((n-1)/2))]}
+document.getElementById("hb").onclick=function(){var b=this;b.classList.remove("r");void b.offsetWidth;b.classList.add("r");ring(560)};
+document.getElementById("art").innerHTML=A.map(function(a,k){var b="";for(var i=0;i<a[1];i++)b+=bell(24);return '<div class="ar" data-i="'+k+'" tabindex="0" role="button"><div class="row"><div class="n">'+a[0]+'</div><div class="b">'+b+'<span class="c">'+a[1]+'</span></div></div><div class="sl"><ul>'+S[k].map(function(s){return "<li>"+s+"</li>"}).join("")+'</ul></div></div>'}).join("");
+var tg=function(e){if(e.type==="keydown"&&e.key!=="Enter"&&e.key!==" ")return;var r=e.target.closest(".ar");if(!r)return;if(e.type==="keydown")e.preventDefault();r.classList.toggle("open");ring(420+r.dataset.i*45)};
+var ae=document.getElementById("art");ae.onclick=tg;ae.onkeydown=tg;
+var we=document.getElementById("wd");we.innerHTML=W.map(function(w,k){var s=Math.round(26+w[1]*2.4);return '<div class="wd" data-k="'+k+'">'+bell(s)+'<b>'+w[0]+'</b><i>'+w[1]+'</i></div>'}).join("");
+we.onclick=function(e){var d=e.target.closest(".wd");if(!d)return;d.classList.remove("on");void d.offsetWidth;d.classList.add("on");ring(900-W[d.dataset.k][1]*12)};
+</script></body></html>
