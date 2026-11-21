@@ -57,6 +57,17 @@ h1 { max-width: 15ch; margin: 0 0 1.1rem; font-size: clamp(2.8rem, 8vw, 5.7rem);
 .text-link span { display: inline-block; margin-left: .2rem; color: var(--blue); }
 .linkedin-logo { width: 1.15em; height: 1.15em; margin-right: .25rem; vertical-align: -.2em; }
 
+.latest-post { margin-top: clamp(2rem, 5vw, 4rem); border: 1px solid var(--grid); border-radius: .45rem; background: var(--panel); overflow: hidden; }
+.latest-post-link { display: grid; grid-template-columns: minmax(16rem, 1.35fr) minmax(18rem, 1fr); color: inherit; text-decoration: none; }
+.latest-post-link:hover .latest-post-action { text-decoration: underline; text-underline-offset: 4px; }
+.latest-post-thumb { aspect-ratio: auto; height: 100%; min-height: 18rem; margin: 0; background: #111827; }
+.latest-post-thumb img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.latest-post-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(1.5rem, 4vw, 3.5rem); }
+.latest-post-copy h2 { margin-bottom: .75rem; }
+.latest-post-copy > p:not(.eyebrow) { margin: 0 0 1.25rem; color: var(--muted); }
+.latest-post-action { font-weight: 700; }
+.latest-post-action span { display: inline-block; margin-left: .2rem; color: var(--blue); }
+
 .work-section { padding: 1rem 0 2rem; }
 .section-heading { margin-bottom: 2rem; }
 h2 { margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; letter-spacing: -.02em; }
@@ -97,6 +108,9 @@ h2 { margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; letter-spac
   .header-inner { align-items: flex-start; flex-direction: column; gap: .8rem; }
   nav { justify-content: flex-start; gap: .3rem 1rem; }
   .intro { padding: 4rem 0 3.5rem; }
+  .latest-post-link { grid-template-columns: 1fr; }
+  .latest-post-thumb { min-height: 0; aspect-ratio: 5 / 3; }
+  .latest-post-copy { padding: 1.5rem; }
   .category-heading { align-items: flex-start; flex-direction: column; gap: .45rem; }
   .project-grid { grid-template-columns: 1fr; gap: 2rem; }
   .about-section { padding: 3rem 0 4rem; }
