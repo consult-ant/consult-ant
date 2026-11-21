@@ -1,244 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>consult-ant – Data Visualisation Portfolio</title>
-<meta name="description" content="Data visualisation projects by consult-ant.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --paper: #F3F6F7;
-    --panel: #E3EAEE;
-    --ink: #1B2A41;
-    --muted: #55657A;
-    --blue: #2F6690;
-    --amber: #D9922B;
-    --rose: #C4476B;
-    --sage: #4F8A76;
-    --grid: #C5D1D9;
-    --head: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
-    --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #121B2A; --panel: #1B283B; --ink: #E8EEF4; --muted: #9AABBE;
-      --blue: #6FA8D6; --amber: #F0B35A; --rose: #E57C9C; --sage: #7FC4AB; --grid: #2E3E55;
-    }
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0; background: var(--paper); color: var(--ink);
-    font: 400 1.0625rem/1.6 var(--body);
-  }
-  a { color: inherit; }
-  :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
-  .wrap { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem; }
-
-  header.site { padding: 1.25rem 0; }
-  header.site .wrap { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
-  .name { font: 700 1.125rem var(--head); text-decoration: none; }
-  nav a { margin-left: 1.25rem; color: var(--muted); text-decoration: none; }
-  nav a:hover { color: var(--ink); text-decoration: underline; }
-
-  .hero { padding: 3rem 0 2rem; }
-  .hero h1 {
-    font: 700 clamp(2.5rem, 7vw, 5rem)/1.02 var(--head);
-    letter-spacing: -0.02em; margin: 0 0 1rem; max-width: 14ch;
-  }
-  .hero p { max-width: 38rem; color: var(--muted); font-size: 1.1875rem; margin: 0 0 2rem; }
-  .hero-chart { width: 100%; height: auto; display: block; }
-  .hero-chart .gl { stroke: var(--grid); stroke-width: 1; }
-  .hero-chart .ln { fill: none; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round;
-    stroke-dasharray: 1; stroke-dashoffset: 0; }
-  .hero-chart .ln.a { stroke: var(--blue); }
-  .hero-chart .ln.b { stroke: var(--amber); }
-  .hero-chart .ln.c { stroke: var(--rose); }
-  @media (prefers-reduced-motion: no-preference) {
-    .hero-chart .ln { animation: draw 2.2s cubic-bezier(.4,.1,.2,1) both; }
-    .hero-chart .ln.b { animation-delay: .25s; }
-    .hero-chart .ln.c { animation-delay: .5s; }
-    @keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-  }
-
-  section { padding: 3.5rem 0 1rem; }
-  h2 { font: 700 clamp(1.75rem, 4vw, 2.5rem)/1.1 var(--head); letter-spacing: -0.01em; margin: 0 0 2rem; }
-
-  .grid { display: grid; gap: 2.5rem 1.75rem; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); }
-  .project { display: block; text-decoration: none; }
-  .project.feature { grid-column: 1 / -1; display: grid; gap: 1.5rem; align-items: center;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
-  .thumb { margin: 0 0 1rem; background: var(--panel); border-radius: 4px; overflow: hidden; aspect-ratio: 5 / 3; }
-  .project.feature .thumb { margin: 0; }
-  .thumb svg { width: 100%; height: 100%; display: block; }
-  .project h3 { font: 700 1.375rem/1.2 var(--head); margin: 0 0 .35rem; }
-  .project.feature h3 { font-size: 2rem; }
-  .project:hover h3, .project:focus-visible h3 { text-decoration: underline; text-underline-offset: 4px; }
-  .project p { margin: 0 0 .4rem; color: var(--muted); }
-  .project .tools { font-size: .9375rem; color: var(--ink); }
-
-  .about { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); max-width: 52rem; }
-  .about p { margin: 0 0 1rem; }
-  ul.links { list-style: none; padding: 0; margin: 0; }
-  ul.links li { margin-bottom: .5rem; }
-  ul.links a { text-underline-offset: 3px; }
-
-  footer { margin-top: 4rem; padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: .9375rem; border-top: 1px solid var(--grid); }
-
-  /* chart fills for the generated thumbnails */
-  .f-blue { fill: var(--blue); } .f-amber { fill: var(--amber); } .f-rose { fill: var(--rose); } .f-sage { fill: var(--sage); }
-  .s-blue { stroke: var(--blue); } .s-rose { stroke: var(--rose); } .s-sage { stroke: var(--sage); }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>consult-ant — Portfolio</title>
+  <meta name="description" content="A portfolio of data visualisations, web apps and games by consult-ant.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header class="site">
-  <div class="wrap">
-    <a class="name" href="#top">consult-ant</a>
-    <nav aria-label="Main">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </div>
-</header>
-
-<main id="top">
-  <div class="wrap">
-    <div class="hero">
-      <h1>Data, drawn clearly.</h1>
-      <p>I design charts, maps and interactive stories that help people see what’s in their data. Replace this line with one sentence about the kind of work you do and who it’s for.</p>
-      <svg class="hero-chart" id="hero-chart" viewBox="0 0 1000 300" role="img"
-           aria-label="Decorative line chart with three series drawing from left to right"></svg>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html">consult-ant</a>
+      <nav aria-label="Main navigation">
+        <a href="visuals/">Data Visualisations</a>
+        <a href="apps/">Web Apps</a>
+        <a href="games/">Games</a>
+        <a href="#about">About</a>
+      </nav>
     </div>
+  </header>
 
-    <section id="work">
-      <h2>Selected work</h2>
-      <!--
-        To add a project, copy one <a class="project"> block below.
-        data-chart picks the placeholder thumbnail: bar, line, scatter or heat.
-        Replace the thumbnail with your own image by swapping the <figure> for:
-        <figure class="thumb"><img src="images/your-image.png" alt="Describe the chart"></figure>
-      -->
-      <div class="grid">
-
-        <a class="project feature" href="#">
-          <figure class="thumb" data-chart="line" data-seed="7" aria-hidden="true"></figure>
-          <div>
-            <h3>Project title goes here</h3>
-            <p>One or two sentences on the question you asked, the data you used and what the visual revealed.</p>
-            <p class="tools">D3.js, Observable</p>
-          </div>
-        </a>
-
-        <a class="project" href="#">
-          <figure class="thumb" data-chart="bar" data-seed="3" aria-hidden="true"></figure>
-          <h3>Second project</h3>
-          <p>A short description of what this shows.</p>
-          <p class="tools">Python, Altair</p>
-        </a>
-
-        <a class="project" href="#">
-          <figure class="thumb" data-chart="scatter" data-seed="11" aria-hidden="true"></figure>
-          <h3>Third project</h3>
-          <p>A short description of what this shows.</p>
-          <p class="tools">R, ggplot2</p>
-        </a>
-
-        <a class="project" href="#">
-          <figure class="thumb" data-chart="heat" data-seed="5" aria-hidden="true"></figure>
-          <h3>Fourth project</h3>
-          <p>A short description of what this shows.</p>
-          <p class="tools">Tableau</p>
-        </a>
-
-      </div>
+  <main class="wrap">
+    <section class="intro" aria-labelledby="intro-title">
+      <p class="eyebrow">Portfolio</p>
+      <h1 id="intro-title">Hello, I’m <span class="placeholder">[Your name]</span>.</h1>
+      <p class="intro-copy">A short introduction goes here. Share what you do, what you enjoy making, and the kinds of problems you like to solve.</p>
+      <a class="text-link" href="https://www.linkedin.com/in/your-username/">Connect with me on LinkedIn <span aria-hidden="true">↗</span></a>
     </section>
 
-    <section id="about">
-      <h2>About</h2>
-      <div class="about">
+    <section class="work-section" aria-labelledby="work-title">
+      <div class="section-heading">
         <div>
-          <p>Write two or three sentences about your background, what you care about in visual design and the tools you use day to day.</p>
-          <p>Add a line about the kind of projects you’d like to take on next.</p>
-        </div>
-        <div id="contact">
-          <p><strong>Get in touch</strong></p>
-          <ul class="links">
-            <li><a href="mailto:you@example.com">you@example.com</a></li>
-            <li><a href="https://github.com/consult-ant">GitHub</a></li>
-            <li><a href="https://www.linkedin.com/in/your-username">LinkedIn</a></li>
-          </ul>
+          <p class="eyebrow">A few things I’ve made</p>
+          <h2 id="work-title">Explore my work</h2>
         </div>
       </div>
+
+      <section class="category" aria-labelledby="visualisations-title">
+        <div class="category-heading">
+          <h3 id="visualisations-title">Data Visualisations</h3>
+          <a class="text-link" href="visuals/">View all visualisations <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="project-grid">
+          <article class="project-card">
+            <figure class="thumb" data-chart="line" data-seed="7" role="img" aria-label="Decorative line-chart thumbnail"></figure>
+            <p class="card-kicker">Recent project</p>
+            <h4>[Visualisation project title]</h4>
+            <p>Replace this with a sentence about the data, the question, and what the visualisation reveals.</p>
+          </article>
+          <article class="project-card">
+            <figure class="thumb" data-chart="heat" data-seed="5" role="img" aria-label="Decorative heatmap thumbnail"></figure>
+            <p class="card-kicker">Recent project</p>
+            <h4>[Visualisation project title]</h4>
+            <p>Add a short description of another recent data visualisation.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="category" aria-labelledby="apps-title">
+        <div class="category-heading">
+          <h3 id="apps-title">Web Apps</h3>
+          <a class="text-link" href="apps/">View all web apps <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="project-grid">
+          <article class="project-card">
+            <figure class="thumb" data-chart="app" data-seed="12" role="img" aria-label="Decorative web app thumbnail"></figure>
+            <p class="card-kicker">Recent project</p>
+            <h4>[Web app project title]</h4>
+            <p>Describe what the app helps people do and what you built.</p>
+          </article>
+          <article class="project-card">
+            <figure class="thumb" data-chart="app" data-seed="18" role="img" aria-label="Decorative web app thumbnail"></figure>
+            <p class="card-kicker">Recent project</p>
+            <h4>[Web app project title]</h4>
+            <p>Add a short description of another recent web app.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="category" aria-labelledby="games-title">
+        <div class="category-heading">
+          <h3 id="games-title">Games</h3>
+          <a class="text-link" href="games/">View all games <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="project-grid">
+          <article class="project-card">
+            <figure class="thumb" data-chart="game" data-seed="21" role="img" aria-label="Decorative game thumbnail"></figure>
+            <p class="card-kicker">Recent project</p>
+            <h4>[Game project title]</h4>
+            <p>Share the idea behind the game and what part you worked on.</p>
+          </article>
+          <article class="project-card">
+            <figure class="thumb" data-chart="game" data-seed="31" role="img" aria-label="Decorative game thumbnail"></figure>
+            <p class="card-kicker">Recent project</p>
+            <h4>[Game project title]</h4>
+            <p>Add a short description of another recent game.</p>
+          </article>
+        </div>
+      </section>
     </section>
-  </div>
-</main>
 
-<footer>
-  <div class="wrap">© <span id="year">2026</span> consult-ant</div>
-</footer>
+    <section class="about-section" id="about" aria-labelledby="about-title">
+      <p class="eyebrow">A little about me</p>
+      <h2 id="about-title">About</h2>
+      <p class="about-copy">Write a few sentences about your background, interests, and approach to making things. This is a good place to share what you’re looking for or what you’d like to work on next.</p>
+      <a class="text-link" href="https://www.linkedin.com/in/your-username/">More about me on LinkedIn <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
 
-<script>
-  // Small seeded random generator so each thumbnail looks the same on every load.
-  function rng(seed) {
-    return function () {
-      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
-      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
-      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-      return ((t ^ t >>> 14) >>> 0) / 4294967296;
-    };
-  }
-  const NS = 'http://www.w3.org/2000/svg';
-
-  // Hero: three random-walk series
-  (function () {
-    const svg = document.getElementById('hero-chart');
-    const r = rng(42), W = 1000, H = 300, n = 28;
-    let out = '';
-    for (let i = 1; i <= 4; i++) out += `<line class="gl" x1="0" x2="${W}" y1="${i * 60}" y2="${i * 60}"/>`;
-    [['a', 200], ['b', 150], ['c', 90]].forEach(([cls, start]) => {
-      let y = start, pts = [];
-      for (let i = 0; i < n; i++) {
-        y += (r() - 0.55) * 34; y = Math.max(20, Math.min(280, y));
-        pts.push((i / (n - 1) * (W - 8) + 4).toFixed(1) + ',' + y.toFixed(1));
-      }
-      out += `<polyline class="ln ${cls}" pathLength="1" points="${pts.join(' ')}"/>`;
-    });
-    svg.innerHTML = out;
-  })();
-
-  // Placeholder thumbnails for the project cards
-  document.querySelectorAll('[data-chart]').forEach(el => {
-    const r = rng(+el.dataset.seed || 1), W = 500, H = 300, type = el.dataset.chart;
-    let s = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" xmlns="${NS}">`;
-    if (type === 'bar') {
-      const n = 12, bw = (W - 80) / n;
-      for (let i = 0; i < n; i++) {
-        const h = 40 + r() * 180;
-        s += `<rect class="f-${i % 4 === 0 ? 'amber' : 'blue'}" x="${40 + i * bw + 4}" y="${H - 30 - h}" width="${bw - 8}" height="${h}"/>`;
-      }
-    } else if (type === 'line') {
-      let y = 160, pts = [];
-      for (let i = 0; i < 24; i++) { y += (r() - 0.5) * 50; y = Math.max(50, Math.min(250, y)); pts.push((30 + i * 18.5).toFixed(0) + ',' + y.toFixed(0)); }
-      s += `<polyline class="s-rose" fill="none" stroke-width="4" stroke-linejoin="round" points="${pts.join(' ')}"/>`;
-    } else if (type === 'scatter') {
-      for (let i = 0; i < 70; i++) {
-        const x = 40 + r() * 420, y = 260 - (x - 40) * 0.45 + (r() - 0.5) * 120;
-        s += `<circle class="f-${i % 3 === 0 ? 'sage' : 'blue'}" cx="${x.toFixed(0)}" cy="${Math.max(30, Math.min(270, y)).toFixed(0)}" r="${4 + r() * 6}" opacity=".8"/>`;
-      }
-    } else {
-      const cols = 14, rows = 8, cw = (W - 60) / cols, ch = (H - 60) / rows;
-      for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++)
-        s += `<rect class="f-sage" x="${30 + i * cw}" y="${30 + j * ch}" width="${cw - 3}" height="${ch - 3}" opacity="${(0.12 + r() * 0.88).toFixed(2)}"/>`;
-    }
-    el.innerHTML = s + '</svg>';
-  });
-
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
+  <footer class="site-footer">
+    <div class="wrap">© <span data-year></span> consult-ant</div>
+  </footer>
+  <script src="site.js"></script>
 </body>
 </html>
