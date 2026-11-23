@@ -31,6 +31,20 @@
       }
       markup += `<path d="M30 30V270H470" fill="none" stroke="${colors.grid}" stroke-width="2"/>`;
       markup += `<polyline points="${points.join(' ')}" fill="none" stroke="${colors.rose}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`;
+    } else if (type === 'probability') {
+      markup += `<rect x="24" y="20" width="452" height="260" rx="18" fill="#faf9f5"/>`;
+      markup += `<text x="250" y="58" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#172554">HOW LIKELY IS “LIKELY”?</text>`;
+      markup += `<path d="M48 224H452" fill="none" stroke="#94a3b8" stroke-width="3"/>`;
+      const labels = ['Unlikely', 'Maybe', 'Likely', 'Certain'];
+      const fills = ['#60a5fa', '#38bdf8', '#2563eb', '#172554'];
+      const widths = [82, 92, 108, 122];
+      let x = 48;
+      labels.forEach(function (label, index) {
+        const barHeight = [58, 82, 112, 142][index];
+        markup += `<rect x="${x}" y="${224 - barHeight}" width="${widths[index]}" height="${barHeight}" rx="8" fill="${fills[index]}"/>`;
+        markup += `<text x="${x + widths[index] / 2}" y="248" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#475569">${label}</text>`;
+        x += widths[index] + 12;
+      });
     } else if (type === 'heat') {
       const cols = 14, rows = 8, cellWidth = 31, cellHeight = 28;
       for (let col = 0; col < cols; col++) for (let row = 0; row < rows; row++) {
