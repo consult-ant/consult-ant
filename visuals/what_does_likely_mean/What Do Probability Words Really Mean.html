@@ -218,7 +218,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         const link = document.createElement("a");
         link.id = "site-back-link";
         link.href = "../";
-        link.textContent = "← Back to Visualisations";
+        link.onclick = function () {
+          if (history.length > 1) {
+            history.back();
+            return false;
+          }
+        };
+        link.textContent = "Back";
         link.style.cssText = "position:fixed;top:12px;left:12px;z-index:1000;padding:8px 14px;border:2px solid #0f172a;border-radius:999px;background:#0f172a;color:#f8fafc;font:700 14px/1.4 Arial,sans-serif;text-decoration:none";
         document.body.appendChild(link);
         observer.disconnect();
