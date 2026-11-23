@@ -1,30 +1,16 @@
 :root {
-  color-scheme: light dark;
-  --paper: #f8fafc;
-  --panel: #eff6ff;
-  --ink: #172554;
-  --muted: #475569;
-  --blue: #2563eb;
-  --amber: #0284c7;
-  --rose: #38bdf8;
+  color-scheme: dark;
+  --paper: #0f172a;
+  --panel: #1e293b;
+  --ink: #f8fafc;
+  --muted: #cbd5e1;
+  --blue: #38bdf8;
+  --amber: #38bdf8;
+  --rose: #0ea5e9;
   --sage: #7dd3fc;
-  --grid: #cbdced;
+  --grid: #334155;
   --head: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
   --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #0b1220;
-    --panel: #111f35;
-    --ink: #f8fafc;
-    --muted: #a7bdd3;
-    --blue: #60a5fa;
-    --amber: #38bdf8;
-    --rose: #0ea5e9;
-    --sage: #7dd3fc;
-    --grid: #263b57;
-  }
 }
 
 * { box-sizing: border-box; }
@@ -42,7 +28,7 @@ a { color: inherit; }
 .site-header { padding: 1.35rem 0; border-bottom: 1px solid var(--grid); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
 .brand { display: flex; align-items: center; gap: .55rem; font: 700 1.2rem var(--head); text-decoration: none; white-space: nowrap; }
-.brand-icon { display: block; flex: 0 0 32px; width: 32px; height: 32px; padding: .2rem; border-radius: 8px; background: #1c1c22; object-fit: contain; }
+.brand-icon { display: block; flex: 0 0 32px; width: 32px; height: 32px; border-radius: 8px; object-fit: contain; }
 nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .35rem 1.2rem; }
 nav a { color: var(--muted); font-size: .95rem; text-decoration: none; }
 nav a:hover, nav a[aria-current="page"] { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
