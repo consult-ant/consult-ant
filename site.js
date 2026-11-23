@@ -31,20 +31,6 @@
       }
       markup += `<path d="M30 30V270H470" fill="none" stroke="${colors.grid}" stroke-width="2"/>`;
       markup += `<polyline points="${points.join(' ')}" fill="none" stroke="${colors.rose}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`;
-    } else if (type === 'probability') {
-      markup += `<rect x="24" y="20" width="452" height="260" rx="18" fill="#faf9f5"/>`;
-      markup += `<text x="250" y="58" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#172554">HOW LIKELY IS “LIKELY”?</text>`;
-      markup += `<path d="M48 224H452" fill="none" stroke="#94a3b8" stroke-width="3"/>`;
-      const labels = ['Unlikely', 'Maybe', 'Likely', 'Certain'];
-      const fills = ['#60a5fa', '#38bdf8', '#2563eb', '#172554'];
-      const widths = [82, 92, 108, 122];
-      let x = 48;
-      labels.forEach(function (label, index) {
-        const barHeight = [58, 82, 112, 142][index];
-        markup += `<rect x="${x}" y="${224 - barHeight}" width="${widths[index]}" height="${barHeight}" rx="8" fill="${fills[index]}"/>`;
-        markup += `<text x="${x + widths[index] / 2}" y="248" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#475569">${label}</text>`;
-        x += widths[index] + 12;
-      });
     } else if (type === 'heat') {
       const cols = 14, rows = 8, cellWidth = 31, cellHeight = 28;
       for (let col = 0; col < cols; col++) for (let row = 0; row < rows; row++) {
@@ -52,34 +38,98 @@
         markup += `<rect x="${30 + col * 31}" y="${28 + row * 30}" width="${cellWidth}" height="${cellHeight}" rx="3" fill="${colors.sage}" opacity="${opacity}"/>`;
       }
     } else if (type === 'coffee') {
-      markup += `<rect x="24" y="20" width="452" height="260" rx="18" fill="#efe3d2"/>`;
-      markup += `<text x="48" y="55" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#5b3b22">COFFEE IMPORTS · 2015–2019</text>`;
-      markup += `<rect x="48" y="72" width="190" height="122" rx="8" fill="#654321"/>`;
-      markup += `<rect x="242" y="72" width="104" height="74" rx="8" fill="#8a6038"/>`;
-      markup += `<rect x="350" y="72" width="102" height="74" rx="8" fill="#a87b4e"/>`;
-      markup += `<rect x="242" y="152" width="98" height="92" rx="8" fill="#b38a58"/>`;
-      markup += `<rect x="344" y="152" width="108" height="92" rx="8" fill="#795333"/>`;
-      markup += `<rect x="48" y="202" width="92" height="42" rx="7" fill="#9a7047"/>`;
-      markup += `<rect x="146" y="202" width="86" height="42" rx="7" fill="#c19a70"/>`;
+      markup += `<rect width="500" height="300" fill="#bf9f7a"/>`;
+      markup += `<rect x="20" y="12" width="460" height="276" fill="#dcc4a6"/>`;
+      markup += `<text x="36" y="39" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#6b4423">Top Coffee Importing</text>`;
+      markup += `<text x="36" y="61" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#6b4423">Countries <tspan font-size="11">from 2015–2019</tspan></text>`;
+      markup += `<path d="M37 78L115 108L145 143L37 198Z" fill="#b38a58"/>`;
+      markup += `<path d="M75 91L148 132" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/>`;
+      markup += `<circle cx="250" cy="170" r="95" fill="#fff"/>`;
+      markup += `<clipPath id="coffee-map-clip"><circle cx="250" cy="170" r="84"/></clipPath>`;
+      markup += `<g clip-path="url(#coffee-map-clip)" stroke="#d9c1a0" stroke-width="1.5">`;
+      markup += `<path d="M154 76H218L228 111L193 132L157 120Z" fill="#9a7047"/>`;
+      markup += `<path d="M218 76L263 76L276 111L249 128L228 111Z" fill="#654321"/>`;
+      markup += `<path d="M263 76H347L345 126L306 145L276 111Z" fill="#8a6038"/>`;
+      markup += `<path d="M347 76H352V171L326 181L306 145L345 126Z" fill="#a87b4e"/>`;
+      markup += `<path d="M154 76L157 120L177 151L151 184L145 145Z" fill="#b38a58"/>`;
+      markup += `<path d="M157 120L193 132L214 166L194 211L151 184L177 151Z" fill="#795333"/>`;
+      markup += `<path d="M193 132L228 111L249 128L261 159L245 195L214 166Z" fill="#c19a70"/>`;
+      markup += `<path d="M249 128L276 111L306 145L326 181L292 204L261 159Z" fill="#795333"/>`;
+      markup += `<path d="M151 184L194 211L206 257H145Z" fill="#9a7047"/>`;
+      markup += `<path d="M194 211L214 166L245 195L257 246L206 257Z" fill="#654321"/>`;
+      markup += `<path d="M245 195L261 159L292 204L326 181L345 257H257Z" fill="#8a6038"/>`;
+      markup += `<path d="M326 181L352 171V257H345Z" fill="#b38a58"/>`;
+      markup += `<text x="187" y="161" text-anchor="middle" stroke="none" fill="#fff" font-family="Arial,sans-serif" font-size="7" font-weight="700">Germany</text>`;
+      markup += `<text x="251" y="185" text-anchor="middle" stroke="none" fill="#fff" font-family="Arial,sans-serif" font-size="7" font-weight="700">United States</text>`;
+      markup += `<text x="299" y="133" text-anchor="middle" stroke="none" fill="#fff" font-family="Arial,sans-serif" font-size="7" font-weight="700">Italy</text>`;
+      markup += `<text x="233" y="101" text-anchor="middle" stroke="none" fill="#fff" font-family="Arial,sans-serif" font-size="7" font-weight="700">United Kingdom</text>`;
+      markup += `<text x="282" y="228" text-anchor="middle" stroke="none" fill="#fff" font-family="Arial,sans-serif" font-size="7" font-weight="700">Spain</text>`;
+      markup += `</g>`;
+      markup += `<text x="427" y="226" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#6b4423">2018</text>`;
+      markup += `<rect x="170" y="265" width="160" height="15" rx="8" fill="#fff"/>`;
+      markup += `<path d="M190 272.5H309" stroke="#6b4423" stroke-width="3" stroke-linecap="round"/>`;
+      markup += `<circle cx="286" cy="272.5" r="4" fill="#6b4423"/>`;
+      markup += `<text x="36" y="268" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#6b4423">Sized by 60-kg bags</text>`;
     } else if (type === 'cowbell') {
-      markup += `<rect x="24" y="20" width="452" height="260" rx="18" fill="#fff3d4"/>`;
-      markup += `<path d="M222 74h56l25 120H197z" fill="#c9811b" stroke="#57340f" stroke-width="8" stroke-linejoin="round"/>`;
-      markup += `<rect x="235" y="52" width="30" height="26" rx="7" fill="#c9811b" stroke="#57340f" stroke-width="7"/>`;
-      markup += `<path d="M215 96l-12 75" stroke="#fff" stroke-opacity=".55" stroke-width="8" stroke-linecap="round"/>`;
-      markup += `<ellipse cx="250" cy="197" rx="37" ry="8" fill="#57340f"/>`;
-      markup += `<text x="135" y="250" text-anchor="middle" font-family="Arial,sans-serif" font-size="31" font-weight="700" fill="#d6361f">659</text>`;
-      markup += `<text x="135" y="269" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#7a6548">SONGS</text>`;
-      markup += `<text x="365" y="250" text-anchor="middle" font-family="Arial,sans-serif" font-size="31" font-weight="700" fill="#d6361f">450</text>`;
-      markup += `<text x="365" y="269" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#7a6548">ARTISTS</text>`;
+      markup += `<rect width="500" height="300" fill="#fff6dc"/>`;
+      markup += `<text x="20" y="23" font-family="Arial,sans-serif" font-size="7" font-weight="700" letter-spacing="1.3" fill="#7a6548">MUSIC MARATHON 2026 · WEEK 40</text>`;
+      markup += `<text x="20" y="48" font-family="Impact,Arial Black,sans-serif" font-size="23" fill="#2b1a0a">THE GREAT <tspan fill="#d6361f">COWBELL</tspan></text>`;
+      markup += `<text x="20" y="70" font-family="Impact,Arial Black,sans-serif" font-size="23" fill="#2b1a0a">CENSUS</text>`;
+      markup += `<path d="M439 26h19l9 35h-37z" fill="#c9811b" stroke="#2b1a0a" stroke-width="4" stroke-linejoin="round"/>`;
+      markup += `<rect x="444" y="18" width="10" height="9" rx="3" fill="#c9811b" stroke="#2b1a0a" stroke-width="3"/>`;
+      markup += `<circle cx="448" cy="64" r="4" fill="#c9811b" stroke="#2b1a0a" stroke-width="2"/>`;
+      markup += `<rect x="16" y="80" width="468" height="48" rx="8" fill="#fffdf4" stroke="#2b1a0a" stroke-width="1.5"/>`;
+      markup += `<path d="M172 85V123M328 85V123" stroke="#e6d3a3" stroke-width="1"/>`;
+      [['659', 'unique songs', 94], ['450', 'different artists', 250], ['76%', 'played once', 406]].forEach(function (stat) {
+        markup += `<text x="${stat[2]}" y="105" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-size="20" fill="#d6361f">${stat[0]}</text>`;
+        markup += `<text x="${stat[2]}" y="119" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" fill="#7a6548">${stat[1]}</text>`;
+      });
+      markup += `<rect x="16" y="137" width="468" height="150" rx="8" fill="#fffdf4" stroke="#2b1a0a" stroke-width="1.5"/>`;
+      markup += `<text x="27" y="154" font-family="Impact,Arial Black,sans-serif" font-size="13" fill="#2b1a0a">COWBELL HALL OF FAME</text>`;
+      markup += `<text x="27" y="165" font-family="Arial,sans-serif" font-size="6.5" fill="#7a6548">Most-played artists · one bell = one song</text>`;
+      [['Kiss', 9], ['Beatles', 8], ['Rush', 7], ['Allman Bros.', 7], ['Guns N’ Roses', 6]].forEach(function (artist, index) {
+        const y = 181 + index * 20;
+        markup += `<text x="27" y="${y + 3}" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#2b1a0a">${artist[0]}</text>`;
+        for (let bell = 0; bell < Math.min(artist[1], 7); bell++) {
+          const x = 132 + bell * 17;
+          markup += `<path d="M${x} ${y - 6}h6l3 11h-12z" fill="#c9811b" stroke="#57340f" stroke-width="1"/>`;
+          markup += `<rect x="${x + 1.5}" y="${y - 8}" width="3" height="3" rx="1" fill="#c9811b" stroke="#57340f" stroke-width=".8"/>`;
+        }
+        markup += `<text x="260" y="${y + 3}" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#d6361f">${artist[1]}</text>`;
+      });
+    } else if (type === 'cowbell-story') {
+      markup += `<rect width="500" height="300" fill="#fff6dc"/>`;
+      markup += `<path d="M0 49H500" stroke="#2b1a0a" stroke-width="1"/>`;
+      for (let bell = 0; bell < 8; bell++) {
+        const x = 179 + bell * 20;
+        markup += `<path d="M${x} 12h7l4 14h-14z" fill="${bell === 0 ? '#c9811b' : '#e3d2a2'}" stroke="#2b1a0a" stroke-width="1"/>`;
+        markup += `<rect x="${x + 2}" y="8" width="3" height="4" rx="1" fill="#c9811b" stroke="#2b1a0a" stroke-width=".8"/>`;
+      }
+      markup += `<path d="M220 98h60l25 86h-110z" fill="#c9811b" stroke="#2b1a0a" stroke-width="7" stroke-linejoin="round"/>`;
+      markup += `<rect x="238" y="80" width="24" height="20" rx="6" fill="#c9811b" stroke="#2b1a0a" stroke-width="6"/>`;
+      markup += `<circle cx="250" cy="187" r="8" fill="#c9811b" stroke="#2b1a0a" stroke-width="4"/>`;
+      markup += `<text x="250" y="222" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-size="27" fill="#2b1a0a">THE <tspan fill="#d6361f">COWBELL</tspan> CHRONICLES</text>`;
+      markup += `<text x="250" y="241" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#7a6548">A scroll through 659 songs that all needed a little more bell.</text>`;
+      markup += `<text x="250" y="269" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" font-weight="700" fill="#2b1a0a">SCROLL TO RING ↓</text>`;
     } else if (type === 'turkey') {
-      markup += `<rect x="24" y="20" width="452" height="260" rx="18" fill="#f7efe0"/>`;
-      markup += `<rect x="24" y="20" width="452" height="68" rx="18" fill="#1f4d3a"/>`;
-      markup += `<text x="48" y="64" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#e8a317">MINNESOTA TURKEY FACT SHEET</text>`;
-      markup += `<text x="52" y="186" font-family="Arial,sans-serif" font-size="96" font-weight="700" fill="#b5400f">#1</text>`;
-      markup += `<text x="58" y="218" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#5a4636">39 MILLION BIRDS IN 2023</text>`;
-      markup += `<rect x="278" y="128" width="148" height="28" rx="6" fill="#b5400f"/>`;
-      markup += `<rect x="278" y="168" width="119" height="28" rx="6" fill="#e8a317"/>`;
-      markup += `<rect x="278" y="208" width="82" height="28" rx="6" fill="#1f4d3a"/>`;
+      markup += `<rect width="500" height="300" fill="#f7efe0"/>`;
+      markup += `<rect x="28" y="14" width="444" height="130" rx="2" fill="#1f4d3a"/>`;
+      markup += `<text x="51" y="34" font-family="Arial,sans-serif" font-size="7" font-weight="700" letter-spacing="1.3" fill="#e8a317">MINNESOTA TURKEY FACT SHEET</text>`;
+      markup += `<text x="47" y="108" font-family="Arial,sans-serif" font-size="86" font-weight="700" fill="#e8a317">#1</text>`;
+      markup += `<text x="198" y="76" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#f7efe0">in the U.S. for</text>`;
+      markup += `<text x="198" y="100" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#f7efe0">turkeys raised</text>`;
+      markup += `<text x="198" y="119" font-family="Arial,sans-serif" font-size="8" fill="#e6dcc6">39 million birds raised in 2023</text>`;
+      markup += `<text x="48" y="168" font-family="Arial,sans-serif" font-size="7" font-weight="700" letter-spacing="1" fill="#b5400f">01 · BY THE NUMBERS</text>`;
+      markup += `<text x="48" y="185" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#2a1810">Minnesota’s turkey industry</text>`;
+      [['39M', '#b5400f'], ['+5.4%', '#e8a317'], ['18%', '#b5400f'], ['$1B+', '#b5400f']].forEach(function (metric, index) {
+        const x = 48 + index * 106;
+        markup += `<rect x="${x}" y="196" width="98" height="49" rx="7" fill="${index === 1 ? '#1f4d3a' : '#fffbf2'}" stroke="#e5d5b8" stroke-width="1"/>`;
+        markup += `<text x="${x + 9}" y="222" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="${index === 1 ? '#e8a317' : metric[1]}">${metric[0]}</text>`;
+        markup += `<path d="M${x + 9} 231h${index === 0 ? 66 : 52}" stroke="#c9b99d" stroke-width="2"/>`;
+      });
+      markup += `<text x="48" y="266" font-family="Arial,sans-serif" font-size="7" font-weight="700" letter-spacing="1" fill="#b5400f">02 · POULTRY MIX</text>`;
+      markup += `<rect x="48" y="273" width="404" height="11" rx="5" fill="#e5d5b8"/>`;
+      markup += `<path d="M53 278.5h242" stroke="#b5400f" stroke-width="11"/><path d="M295 278.5h103" stroke="#e8a317" stroke-width="11"/><path d="M398 278.5h51" stroke="#1f4d3a" stroke-width="11"/>`;
     } else if (type === 'app') {
       markup += `<rect x="28" y="24" width="444" height="252" rx="12" fill="${colors.panel}"/>`;
       markup += `<rect x="28" y="24" width="444" height="40" rx="12" fill="${colors.blue}"/>`;

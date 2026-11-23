@@ -70,6 +70,8 @@ h2 { margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; letter-spac
 .thumb svg { display: block; width: 100%; height: 100%; }
 .gif-thumb { background: #0f172a; }
 .gif-thumb img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.screenshot-thumb { background: #faf8f4; }
+.screenshot-thumb img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .project-detail { max-width: 62rem; margin: 0 auto; padding: 3rem 0 5rem; text-align: center; }
 .back-link { display: inline-flex; align-items: center; gap: .4rem; margin: 0 0 1.5rem; padding: .5rem .85rem; border: 1px solid var(--grid); border-radius: 999px; color: var(--muted); font-weight: 700; text-decoration: none; }
 .back-link:hover { border-color: var(--blue); color: var(--ink); }
