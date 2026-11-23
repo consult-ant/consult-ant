@@ -212,6 +212,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     (function () {
       const observer = new MutationObserver(function () {
         if (!document.body || document.getElementById("site-back-link")) return;
+        const style = document.createElement("style");
+        style.textContent = "html,body{min-height:100%;}body{display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;}x-dc{max-width:100%;}";
+        document.head.appendChild(style);
         const link = document.createElement("a");
         link.id = "site-back-link";
         link.href = "../";
