@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" role="img" aria-label="RPG Map Demo">
+  <rect width="500" height="300" fill="#5b9a4a"/>
+  <g fill="#326b39" opacity=".78">
+    <circle cx="25" cy="20" r="18"/><circle cx="78" cy="20" r="18"/><circle cx="131" cy="20" r="18"/><circle cx="184" cy="20" r="18"/><circle cx="237" cy="20" r="18"/><circle cx="290" cy="20" r="18"/><circle cx="343" cy="20" r="18"/><circle cx="396" cy="20" r="18"/><circle cx="449" cy="20" r="18"/>
+    <circle cx="25" cy="280" r="18"/><circle cx="78" cy="280" r="18"/><circle cx="131" cy="280" r="18"/><circle cx="184" cy="280" r="18"/><circle cx="237" cy="280" r="18"/><circle cx="290" cy="280" r="18"/><circle cx="343" cy="280" r="18"/><circle cx="396" cy="280" r="18"/><circle cx="449" cy="280" r="18"/>
+  </g>
+  <g fill="#4b8244" opacity=".9">
+    <circle cx="70" cy="92" r="20"/><circle cx="168" cy="72" r="20"/><circle cx="218" cy="128" r="20"/><circle cx="348" cy="86" r="20"/><circle cx="432" cy="114" r="20"/>
+    <circle cx="112" cy="218" r="20"/><circle cx="184" cy="198" r="20"/><circle cx="354" cy="222" r="20"/><circle cx="442" cy="172" r="20"/>
+  </g>
+  <g fill="#d8b86c" stroke="#a58b4e" stroke-width="2">
+    <rect x="222" y="45" width="56" height="95"/><rect x="222" y="140" width="56" height="120"/>
+    <rect x="25" y="175" width="450" height="34"/>
+  </g>
+  <rect x="306" y="154" width="112" height="72" rx="3" fill="#4f83bd"/>
+  <g fill="#fff" opacity=".45">
+    <rect x="320" y="164" width="16" height="3"/><rect x="356" y="164" width="16" height="3"/><rect x="392" y="164" width="16" height="3"/>
+    <rect x="320" y="194" width="16" height="3"/><rect x="356" y="194" width="16" height="3"/><rect x="392" y="194" width="16" height="3"/>
+  </g>
+  <g>
+    <rect x="238" y="246" width="24" height="24" rx="3" fill="#3e63a8"/>
+    <rect x="242" y="250" width="16" height="10" fill="#f4c47a"/>
+    <rect x="244" y="260" width="12" height="10" fill="#2a4a7d"/>
+  </g>
+  <g fill="#6e4427" stroke="#4f301c" stroke-width="3">
+    <rect x="84" y="112" width="38" height="28"/><rect x="390" y="100" width="38" height="28"/><rect x="132" y="208" width="38" height="28"/>
+  </g>
+  <g fill="#f6cf52">
+    <circle cx="103" cy="125" r="5"/><circle cx="409" cy="113" r="5"/><circle cx="151" cy="221" r="5"/>
+  </g>
+  <text x="250" y="286" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif" font-size="14" font-weight="700" opacity=".9">LITTLE REALM</text>
+</svg>
