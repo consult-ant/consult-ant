@@ -33,13 +33,13 @@ nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .35rem 1.2
 nav a { color: var(--muted); font-size: .95rem; text-decoration: none; }
 nav a:hover, nav a[aria-current="page"] { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
 
-.intro { padding: clamp(4rem, 10vw, 8rem) 0 2rem; max-width: 52rem; }
+.intro { padding: clamp(4rem, 10vw, 8rem) 0 2rem; }
 .eyebrow, .card-kicker { color: var(--blue); font-size: .78rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
 .eyebrow { margin: 0 0 .75rem; }
 h1, h2, h3, h4 { font-family: var(--head); }
 h1 { max-width: 15ch; margin: 0 0 1.1rem; font-size: clamp(2.8rem, 8vw, 5.7rem); line-height: .98; letter-spacing: -.035em; }
 .placeholder { color: var(--blue); }
-.intro-copy { max-width: 40rem; margin: 0 0 1.25rem; color: var(--muted); font-size: clamp(1.1rem, 2.5vw, 1.3rem); }
+.intro-copy { margin: 0 0 1.25rem; color: var(--muted); font-size: clamp(1.1rem, 2.5vw, 1.3rem); }
 .text-link { font-weight: 700; text-decoration-thickness: 1px; text-underline-offset: 4px; }
 .text-link span { display: inline-block; margin-left: .2rem; color: var(--blue); }
 .linkedin-logo { width: 1.15em; height: 1.15em; margin-right: .25rem; vertical-align: -.2em; }
@@ -80,8 +80,6 @@ h2 { margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; letter-spac
 .project-description h2 { margin: 0 0 .75rem; font-size: 1.25rem; }
 .project-description p { margin: 0; }
 .project-detail img { display: block; width: 100%; max-height: 42rem; margin: 0 auto; object-fit: contain; border-radius: .3rem; background: #0f172a; }
-.thumb.coming-soon { display: flex; align-items: center; justify-content: center; border: 1px dashed var(--grid); }
-.thumb.coming-soon span { padding: .5rem 1rem; border: 1px solid var(--grid); border-radius: 999px; background: var(--paper); color: var(--muted); font: 700 1rem var(--head); letter-spacing: .04em; }
 .card-kicker { margin: 0 0 .35rem; font-size: .7rem; }
 .project-card h4 { margin: 0 0 .4rem; font-size: 1.3rem; line-height: 1.25; }
 .project-card h2 { margin: 0 0 .4rem; font-size: 1.3rem; line-height: 1.25; }
