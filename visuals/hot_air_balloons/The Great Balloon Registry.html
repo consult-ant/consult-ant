@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Great Balloon Registry</title>
+<style>
+:root{--sky1:#bfe6ff;--sky2:#fff1f6;--ink:#2b2a4c;--card:rgba(255,255,255,.78);--mut:#6a6890;--line:rgba(43,42,76,.12);--c1:#ff6b8b;--c2:#ffb84d;--c3:#4fc3a1;--c4:#6c8cff;--c5:#b07cff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--sky1:#1b1f4d;--sky2:#4a2a5e;--ink:#f4f0ff;--card:rgba(30,26,66,.72);--mut:#b9b3e0;--line:rgba(255,255,255,.15)}}
+:root[data-theme="dark"]{--sky1:#1b1f4d;--sky2:#4a2a5e;--ink:#f4f0ff;--card:rgba(30,26,66,.72);--mut:#b9b3e0;--line:rgba(255,255,255,.15)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:"Baloo 2","Trebuchet MS","Segoe UI",system-ui,sans-serif;background:linear-gradient(var(--sky1),var(--sky2)) fixed;overflow-x:hidden}
+#site-back-link{position:fixed;top:12px;left:12px;z-index:1000;padding:6px 14px;border:2px solid var(--ink);border-radius:99px;background:var(--card);color:var(--ink);font-family:system-ui,sans-serif;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(43,42,76,.14)}
+#site-back-link:hover{transform:translateY(-1px)}
+#sky{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.cloud{position:absolute;width:160px;height:50px;background:#fff;border-radius:50px;opacity:.7;filter:blur(1px);animation:drift linear infinite}
+.cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud:before{width:70px;height:70px;left:25px;top:-35px}.cloud:after{width:50px;height:50px;left:80px;top:-22px}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .cloud{opacity:.12}}
+@keyframes drift{from{transform:translateX(-250px)}to{transform:translateX(110vw)}}
+main{position:relative;z-index:1;pointer-events:none;max-width:980px;margin:0 auto;padding:0 18px 60px}
+header{min-height:78vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+h1{font-size:clamp(2.4rem,8vw,5rem);margin:0;line-height:1;letter-spacing:-1px}
+h1 span{background:linear-gradient(90deg,var(--c1),var(--c2),var(--c5));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{max-width:520px;color:var(--mut);font-size:1.15rem;margin:14px 0}
+.pill{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:6px 16px;margin:4px;font-weight:700}
+section{pointer-events:auto;background:var(--card);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:28px;padding:26px 22px;margin:26px 0;box-shadow:0 10px 40px rgba(80,60,160,.12)}
+h2{margin:0 0 4px;font-size:1.7rem}.k{color:var(--mut);margin:0 0 14px}
+.btn{font:inherit;font-weight:700;border:2px solid var(--ink);background:transparent;color:var(--ink);border-radius:99px;padding:6px 16px;cursor:pointer;margin:2px}
+.btn.on{background:var(--ink);color:var(--sky1)}
+.scroll{overflow-x:auto}
+#fleet{position:relative;height:340px;min-width:760px}
+.fb{position:absolute;cursor:pointer;transition:left .8s cubic-bezier(.3,1.4,.5,1),top .8s;animation:bob 4s ease-in-out infinite}
+.fb:hover{z-index:5;filter:brightness(1.1)}
+@keyframes bob{50%{transform:translateY(-12px) rotate(2deg)}}
+.fb b{position:absolute;left:0;right:0;bottom:-20px;text-align:center;font-size:.72rem;white-space:nowrap}
+#tip{position:fixed;z-index:50;background:var(--ink);color:var(--sky1);padding:8px 12px;border-radius:12px;font-size:.88rem;pointer-events:none;opacity:0;transition:opacity .15s;max-width:240px}
+#info{min-height:2.6em;font-weight:700}
+.fly{position:absolute;bottom:-160px;cursor:pointer;pointer-events:auto;animation:rise linear forwards}
+@keyframes rise{to{transform:translateY(-130vh) translateX(var(--sw))}}
+#hero{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}#hero.off .fly{pointer-events:none;cursor:default}
+svg text{fill:var(--ink);font-family:inherit}
+.bar{cursor:pointer;transition:opacity .2s}
+.dec{display:flex;gap:10px;justify-content:space-around;flex-wrap:wrap}
+.dec div{text-align:center;cursor:pointer;width:112px;transition:transform .3s}.dec div:hover{transform:translateY(-8px)}
+.pop{position:fixed;width:8px;height:8px;border-radius:50%;pointer-events:none;z-index:60}
+.shape{font-size:1.5rem;font-weight:800;margin:10px 0;min-height:3.4rem}
+footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px 16px;color:var(--mut);padding:20px;font-size:.9rem}footer span{flex:1;min-width:140px}footer span:nth-child(2){text-align:center}footer span:last-child{text-align:right}
+@media(prefers-reduced-motion:reduce){.fb,.cloud,.fly{animation:none}}
+</style></head><body>
+<a id="site-back-link" href="../index.html">← Visualisations</a>
+<div id="sky"></div><div id="hero"></div><div id="tip"></div>
+<main>
+<header>
+ <div class="pill" id="score">🎈 Pop a balloon to start</div>
+ <h1>The Great<br><span>Balloon Registry</span></h1>
+ <p class="sub" id="lede"></p>
+ <div><span class="pill" id="p1"></span><span class="pill" id="p2"></span><span class="pill" id="p3"></span></div>
+ <p class="sub">Tap the drifting balloons, then scroll down ↓</p>
+</header>
+
+<section><h2>Who builds the sky?</h2><p class="k">Each balloon is a manufacturer, sized by fleet. Tap one to see how many are still flying.</p>
+ <div><button class="btn on" data-s="n">By fleet size</button><button class="btn" data-s="p">By still flying</button></div>
+ <div class="scroll"><div id="fleet"></div></div><p id="info"></p></section>
+
+<section><h2>A balloon for every birth year</h2><p class="k">Higher means more built that year. Pink balloons still fly, grey ones have retired.</p>
+ <div class="scroll"><svg id="years" viewBox="0 0 900 340" style="min-width:700px;width:100%"></svg></div><p id="yinfo" class="k">Hover a balloon.</p></section>
+
+<section><h2>Do old balloons ever retire?</h2><p class="k">Each balloon is filled to the share of its birth decade still in service. Tap to refill.</p>
+ <div class="dec" id="dec"></div></section>
+
+<section><h2>Where do they land?</h2><p class="k">The ten busiest launch fields in the registry.</p><svg id="loc" viewBox="0 0 760 400" style="width:100%"></svg></section>
+
+<section><h2>The oddballs 🦄</h2><p class="k" id="shapek"></p>
+ <div class="shape" id="shape">Press the button for a surprise</div>
+ <button class="btn on" id="sur">🎲 Surprise me</button>
+ <p class="k" id="size" style="margin-top:18px"></p></section>
+<footer><span>#makeovermonday</span><span>Vibed by Ant Pulley</span><span>Data Source: Kaggle</span></footer>
+</main>
+<script>
+const D={"total":7235,"inService":4908,"out":2240,"mfr":[["Aerostar/Raven",1412,0.55],["Cameron US",1109,0.64],["Firefly/Balloon Works",790,0.63],["Lindstrand US",720,0.84],["Kubicek",506,0.96],["Cameron UK",488,0.5],["Ultramagic",339,0.93],["HEAD",264,0.83],["Experimental",262,0.87],["Thunder & Colt",194,0.41],["Avian Balloon Co.",123,0.25],["Lindstrand UK",121,0.61],["Adams/Richardson",95,0.95],["Adams",87,0.41]],"years":[[1963,0,1],[1965,0,1],[1966,0,1],[1967,0,1],[1969,1,9],[1970,1,6],[1971,2,7],[1972,4,14],[1973,0,20],[1974,4,23],[1975,4,15],[1976,6,25],[1977,4,29],[1978,10,21],[1979,16,48],[1980,10,66],[1981,19,56],[1982,20,30],[1983,19,51],[1984,18,37],[1985,29,42],[1986,35,75],[1987,53,99],[1988,44,79],[1989,40,89],[1990,83,104],[1991,103,109],[1992,113,86],[1993,115,106],[1994,131,86],[1995,128,71],[1996,148,87],[1997,143,78],[1998,148,61],[1999,121,60],[2000,134,56],[2001,120,37],[2002,133,38],[2003,125,43],[2004,106,30],[2005,128,31],[2006,116,25],[2007,109,24],[2008,105,12],[2009,80,7],[2010,68,13],[2011,97,8],[2012,99,8],[2013,112,9],[2014,109,7],[2015,103,4],[2016,141,11],[2017,136,4],[2018,123,5],[2019,125,3],[2020,100,1],[2021,159,0],[2022,150,0],[2023,144,1],[2024,155,0],[2025,130,0],[2026,97,0]],"dec":[[1970,259,0.197],[1980,911,0.315],[1990,2081,0.593],[2000,1459,0.792],[2010,1185,0.939],[2020,937,0.998]],"loc":[["New Mexico",795],["UK",548],["Texas",342],["Michigan",324],["Arizona",303],["California",300],["Ohio",290],["Canada",273],["Colorado",249],["Missouri",187],["Iowa",175],["Indiana",174]],"types":{"Round":5764,"Special":633,"Racer":482,"Hopper":176},"cu":{"med":90000,"max":600000,"mode":90000,"modeN":1688},"shapes":[["King Capybara","AirFly","Brazil"],["Sale Away","Lindstrand US","Colorado"],["Welcome Home!","Cameron US","Wisconsin"],["Mr. Peanut","Cameron UK","UK"],["Minnie Moo","Experimental","Canada"],["Gordon Gecko","Billy Billy","Missouri"],["The Wehrenberg Theatres Popcorn Bag","Aerostar/Raven","Missouri"],["Mickey Mouse","Cameron UK","Florida"],["Mr. Wonderfuel","Colt","UK"],["Akties Gelb Bull","Cameron UK","UK"],["Smokey Bear","Aerostar/Raven","New Mexico"],["Finley The Fish","Aeromagic","Indiana"],["Singha Water Heart","Ultramagic","Thailand"],["Voluntold","AirFly","Arizona"],["Cardinal Gold Ball","Cameron UK","Canada"],["Smokey Bear","Cameron US","New Mexico"],["Bravo Bear","Ultramagic","Taiwan"],["Beer Mug","Colt","UK"],["Pentastar Chrysler","Cameron UK","Canada"],["Caco El Tigre","Libra","Brazil"],["Energizer Bunny Hot Hare","Aerostar/Raven","Missouri"],["RE/MAX Soaring Home","Aerostar/Raven","Colorado"],["Love Bear","BARD Balloons","Canada"],["Little Pirate","Amazon","Oregon"],["Turtle","Aeromagic","Brazil"],["Yellow Bird","Experimental","Florida"],["Claw'd","AirFly","Colorado"],["Laska The Unicorn","Kubicek","Georgia"],["Meteo","BARD Balloons","Canada"],["Piggles","Cameron UK","Michigan"],["Rocket Man","Adams/Richardson","China"],["Elvis","AirFly","New Mexico"],["Ohoo Dips","Cameron UK","UK"],["Buzby","Colt","UK"],["Astro The Alien","Diamond","UK"],["Ben & Jerry's Cherry Garcia Cone","Cameron US","Michigan"],["Piranha","RVB","New Mexico"],["Elephant","Cameron UK","UK"],["Stairway To Heaven","Aeromagic","South Dakota"],["Blue Whale","Pasha","Turkey"],["Senna Helmet","Aeromagic","Brazil"],["Blast Off!","Avian Balloon Co.","Washington"],["Smasung Monitor","Cameron UK","UK"],["Color Your World Can","Aerostar/Raven","Canada"],["Mandrill","RVB","Brazil"],["La Ristra","Aerostar/Raven","New Mexico"],["Chronicle of The 20th Century","Thunder & Colt","UK"],["United Van Lines Truck","Aerostar/Raven","Missouri"],["Toy Car","Aeromagic","Brazil"],["Lazy Boy","Lindstrand UK","UK"],["Falcon Ozi","Libra","Brazil"],["Capitao Carverna","Libra","Brazil"],["Ms. Autumn","Aerostar/Raven","Montana"],["Lulu The Unicorn","Ballons Chaize","France"],["Jack","Aeromagic","Kansas"],["Uniroyal Tire","Cameron US","Texas"],["Bigfoot","Cameron US","Wisconsin"],["Freiberger Beer Crate","Cameron UK","Germany"],["Super FMG","Cameron UK","Canada"],["Maple Leaf","Cameron UK","Canada"]],"names":[["RE/MAX",63],["Rainbow Ryders",27],["Kaleidoscope",12],["Heaven Bound",11],["Freedom",9]]},$=s=>document.querySelector(s),f=n=>n.toLocaleString('en-GB');
+const P=['#ff6b8b','#ffb84d','#4fc3a1','#6c8cff','#b07cff','#ff8f5a','#4cc9f0'];
+const NS='http://www.w3.org/2000/svg';
+const tip=$('#tip');
+const show=(e,t)=>{tip.innerHTML=t;tip.style.opacity=1;tip.style.left=Math.min(e.clientX+14,innerWidth-250)+'px';tip.style.top=e.clientY+14+'px'};
+const hide=()=>tip.style.opacity=0;
+// balloon svg string
+function bal(c,w=60,fill=1,id=''){const h=w*1.35,cl='c'+id+Math.random().toString(36).slice(2,6);
+ return `<svg width="${w}" height="${h}" viewBox="0 0 60 81" overflow="visible"><defs><clipPath id="${cl}"><rect x="0" y="${6+43*(1-fill)}" width="60" height="60"/></clipPath></defs>
+ <path d="M30 2C10 2 2 18 4 30c2 12 12 20 20 24h12c8-4 18-12 20-24C58 18 50 2 30 2z" fill="rgba(128,128,150,.28)"/>
+ <path d="M30 2C10 2 2 18 4 30c2 12 12 20 20 24h12c8-4 18-12 20-24C58 18 50 2 30 2z" fill="${c}" clip-path="url(#${cl})"/>
+ <path d="M30 2c-9 8-9 38-4 52M30 2c9 8 9 38 4 52" stroke="rgba(255,255,255,.55)" fill="none" stroke-width="2"/>
+ <path d="M24 54l-4 12M36 54l4 12" stroke="#6b4f3a" stroke-width="1.5"/><rect x="19" y="66" width="22" height="13" rx="3" fill="#b9854f"/></svg>`}
+// header text
+const sh=Math.round(D.inService/D.total*100);
+$('#lede').textContent=`Somewhere in this registry, ${f(D.total)} hot air balloons are catalogued. Most still float; some have drifted into retirement.`;
+$('#p1').textContent=`${f(D.inService)} in service (${sh}%)`;$('#p2').textContent=`${f(D.out)} retired`;$('#p3').textContent=`Biggest: ${f(D.cu.max)} cu ft`;
+// clouds
+for(let i=0;i<7;i++){const c=document.createElement('div');c.className='cloud';c.style.cssText=`top:${Math.random()*80}%;transform:scale(${.6+Math.random()});animation-duration:${60+Math.random()*80}s;animation-delay:-${Math.random()*90}s`;$('#sky').append(c)}
+// drifting hero balloons
+let pops=0;const facts=[`${f(D.cu.modeN)} balloons share the classic ${f(D.cu.mode)} cu ft envelope.`,`${D.names[0][1]} balloons are named ${D.names[0][0]}!`,`${D.loc[0][0]} hosts ${D.loc[0][1]} of them.`,`Only ${f(D.types.Hopper)} are tiny hoppers.`,`${f(D.types.Special)} are special shapes, from koalas to teapots.`,`${f(D.types.Racer)} are racers, built to be quick.`];
+function confetti(x,y){for(let i=0;i<14;i++){const e=document.createElement('i');e.className='pop';e.style.cssText=`left:${x}px;top:${y}px;background:${P[i%7]}`;document.body.append(e);const a=Math.random()*6.28,d=40+Math.random()*70;e.animate([{transform:'translate(0,0)',opacity:1},{transform:`translate(${Math.cos(a)*d}px,${Math.sin(a)*d+40}px)`,opacity:0}],{duration:800,easing:'ease-out'}).onfinish=()=>e.remove()}}
+function spawn(){const el=document.createElement('div');el.className='fly';const w=40+Math.random()*50;el.style.cssText=`left:${Math.random()*92}%;--sw:${(Math.random()-.5)*160}px;animation-duration:${14+Math.random()*14}s`;
+ el.innerHTML=bal(P[Math.random()*7|0],w);el.onclick=e=>{const r=el.getBoundingClientRect();confetti(r.left+r.width/2,r.top+r.height/3);el.remove();pops++;$('#score').textContent=`🎈 ${pops} popped · ${facts[pops%facts.length]}`};
+ el.onanimationend=()=>el.remove();$('#hero').append(el)}
+for(let i=0;i<7;i++)setTimeout(spawn,i*900);setInterval(spawn,2200);
+const hd=$('header'),hr=$('#hero');const chk=()=>hr.classList.toggle('off',hd.getBoundingClientRect().bottom<90);addEventListener('scroll',chk,{passive:true});chk();
+// fleet
+const fl=$('#fleet'),mx=D.mfr[0][1];
+D.mfr.forEach((m,i)=>{const d=document.createElement('div');d.className='fb';const w=32+Math.sqrt(m[1]/mx)*70;d.dataset.w=w;d.style.animationDelay=-i*.6+'s';
+ d.innerHTML=bal(P[i%7],w,m[2])+`<b>${m[0]}</b>`;
+ d.onmousemove=e=>show(e,`<b>${m[0]}</b><br>${f(m[1])} balloons<br>${Math.round(m[2]*100)}% still in service`);d.onmouseleave=hide;
+ d.onclick=()=>{$('#info').textContent=`${m[0]}: ${f(m[1])} balloons, ${Math.round(m[2]*100)}% still flying.`};fl.append(d)});
+function lay(k){const items=[...fl.children],ord=D.mfr.map((m,i)=>i);if(k=='p')ord.sort((a,b)=>D.mfr[b][2]-D.mfr[a][2]);
+ const cols=7,sw=Math.max(fl.clientWidth,760)/cols;ord.forEach((idx,pos)=>{const e=items[idx],r=pos/cols|0,c=pos%cols;e.style.left=c*sw+10+'px';e.style.top=r*165+(k=='p'?(1-D.mfr[idx][2])*30:0)+'px'})}
+lay('n');document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-s]').forEach(x=>x.classList.remove('on'));b.classList.add('on');lay(b.dataset.s)});
+$('#info').textContent='The fleet is led by '+D.mfr[0][0]+' with '+f(D.mfr[0][1])+' balloons.';
+// years lollipops
+(function(){const s=$('#years'),mxy=Math.max(...D.years.map(y=>y[1]+y[2])),n=D.years.length,gap=860/n;
+ D.years.forEach((y,i)=>{const tot=y[1]+y[2],x=20+i*gap+gap/2,top=300-tot/mxy*250,g=document.createElementNS(NS,'g');g.setAttribute('class','bar');
+ const r=Math.max(3.5,gap/2.3),alive=y[1]/tot;
+ g.innerHTML=`<line x1="${x}" y1="${top+r}" x2="${x}" y2="305" stroke="rgba(128,128,150,.4)"/><circle cx="${x}" cy="${top}" r="${r}" fill="rgba(128,128,150,.45)"/><path d="M${x-r} ${top}a${r} ${r} 0 0 1 ${2*r} 0a${r} ${r} 0 0 1 -${2*r} 0z" fill="none"/><circle cx="${x}" cy="${top}" r="${r*Math.sqrt(alive)}" fill="${P[0]}"/>`;
+ g.onmousemove=e=>{show(e,`<b>${y[0]}</b>: ${tot} built<br>${y[1]} flying · ${y[2]} retired`);$('#yinfo').textContent=`${y[0]}: ${tot} balloons built, ${Math.round(alive*100)}% still in service.`};g.onmouseleave=hide;
+ g.onmouseenter=()=>g.animate([{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}],{duration:500});s.append(g);
+ if(y[0]%5==0){const t=document.createElementNS(NS,'text');t.setAttribute('x',x);t.setAttribute('y',325);t.setAttribute('text-anchor','middle');t.setAttribute('font-size',12);t.textContent=y[0];s.append(t)}});
+ const pk=[...D.years].sort((a,b)=>b[1]+b[2]-a[1]-a[2])[0];$('#yinfo').textContent=`Peak year: ${pk[0]}, with ${pk[1]+pk[2]} balloons built. Hover a balloon.`})();
+// decades
+D.dec.forEach((d,i)=>{const e=document.createElement('div');const draw=()=>{e.innerHTML=bal(P[i%7],90,0.02)+`<h3 style="margin:6px 0 0">${d[0]}s</h3><div class="k">${f(d[1])} built</div>`;
+ requestAnimationFrame(()=>{let t=0;const run=()=>{t=Math.min(1,t+.03);e.innerHTML=bal(P[i%7],90,d[2]*(1-Math.pow(1-t,3)))+`<h3 style="margin:6px 0 0">${d[0]}s · ${Math.round(d[2]*100*t)}%</h3><div class="k">${f(d[1])} built</div>`;if(t<1)requestAnimationFrame(run)};run()})};
+ e.onclick=draw;e._d=draw;$('#dec').append(e)});
+new IntersectionObserver((en,ob)=>{if(en[0].isIntersecting){[...$('#dec').children].forEach((c,i)=>setTimeout(c._d,i*150));ob.disconnect()}},{threshold:.4}).observe($('#dec'));
+// locations
+(function(){const s=$('#loc'),L=D.loc.slice(0,10),m=L[0][1];L.forEach((l,i)=>{const y=i*38+10,w=l[1]/m*480,g=document.createElementNS(NS,'g');g.setAttribute('class','bar');
+ g.innerHTML=`<text x="0" y="${y+22}" font-size="15" font-weight="700">${l[0]}</text><rect x="120" y="${y+6}" width="0" height="12" rx="6" fill="${P[i%7]}"><animate attributeName="width" to="${w}" dur="${.6+i*.08}s" fill="freeze" begin="0s"/></rect><g transform="translate(${120+w},${y-4}) scale(.42)" opacity="0"><animate attributeName="opacity" to="1" begin="${.6+i*.08}s" dur=".2s" fill="freeze"/>${bal(P[i%7],60).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g><text x="${150+w}" y="${y+22}" font-size="14" fill-opacity=".8">${f(l[1])}</text>`;
+ g.onmousemove=e=>show(e,`<b>${l[0]}</b><br>${f(l[1])} balloons (${(l[1]/D.total*100).toFixed(1)}% of the registry)`);g.onmouseleave=hide;s.append(g)})})();
+// oddballs
+$('#shapek').textContent=`${f(D.types.Special)} special shapes in the registry. Here's a random sample of what's floating around.`;
+$('#size').textContent=`Size check: the typical balloon holds ${f(D.cu.med)} cu ft. The biggest in the registry holds ${f(D.cu.max)}, about ${(D.cu.max/D.cu.med).toFixed(1)} times as much.`;
+$('#sur').onclick=()=>{const s=D.shapes[Math.random()*D.shapes.length|0];$('#shape').textContent=`${s[0]} · ${s[1]} · ${s[2]}`;const r=$('#sur').getBoundingClientRect();confetti(r.left+r.width/2,r.top)};
+</script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1360dffe57804f1eba78f4a3256f47e8"}'></script><!-- End Cloudflare Web Analytics -->
+</body></html>
