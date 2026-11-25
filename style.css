@@ -9,6 +9,24 @@
   --rose: #0ea5e9;
   --sage: #7dd3fc;
   --grid: #334155;
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --radius-sm: .3rem;
+  --radius-md: .5rem;
+  --radius-pill: 999px;
+  --text-body: 1.0625rem;
+  --text-control: .95rem;
+  --button-primary-bg: var(--blue);
+  --button-primary-hover-bg: var(--sage);
+  --button-primary-text: var(--paper);
+  --button-border: var(--grid);
+  --button-radius: var(--radius-md);
+  --button-min-height: 2.75rem;
+  --button-padding-inline: var(--space-4);
   --head: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
   --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
@@ -19,11 +37,33 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font: 400 1.0625rem/1.6 var(--body);
+  font: 400 var(--text-body)/1.6 var(--body);
 }
 a { color: inherit; }
 :focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
 .wrap { width: min(100% - 2.5rem, 68rem); margin: 0 auto; }
+
+.button {
+  display: inline-flex;
+  min-height: var(--button-min-height);
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--button-padding-inline);
+  border: 1px solid transparent;
+  border-radius: var(--button-radius);
+  font: 700 var(--text-control)/1.2 var(--body);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.button--primary { background: var(--button-primary-bg); color: var(--button-primary-text); }
+.button--primary:hover:not(:disabled) { background: var(--button-primary-hover-bg); }
+.button--secondary { border-color: var(--button-border); color: var(--ink); }
+.button--secondary:hover:not(:disabled) { border-color: var(--blue); background: var(--panel); }
+.button--quiet { color: var(--muted); }
+.button--quiet:hover:not(:disabled) { background: var(--panel); color: var(--ink); }
+.button:disabled { opacity: .55; cursor: not-allowed; }
 
 .site-header { padding: 1.35rem 0; border-bottom: 1px solid var(--grid); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
@@ -92,6 +132,24 @@ h2 { margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; letter-spac
 .page-intro h1 { font-size: clamp(2.5rem, 7vw, 4.5rem); }
 .page-intro p:last-child { max-width: 42rem; margin: .8rem 0 0; color: var(--muted); }
 .collection { padding: 2rem 0 5rem; }
+.design-section { padding: 0 0 3rem; }
+.design-section > h2 { margin-bottom: .75rem; }
+.design-section > p { max-width: 46rem; color: var(--muted); }
+.button-examples { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin: 1.5rem 0; }
+.button-example-label { min-width: 6rem; color: var(--muted); font-size: .9rem; }
+.design-note { max-width: 46rem; padding: 1rem 1.25rem; border-left: 3px solid var(--blue); background: var(--panel); color: var(--muted); }
+.design-note p { margin: 0; }
+.design-note p + p { margin-top: .5rem; }
+.design-code { display: inline-block; padding: .1rem .35rem; border-radius: .25rem; background: var(--panel); color: var(--ink); font: .9em/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; }
+.token-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: .75rem; max-width: 46rem; margin: 1.5rem 0; }
+.token-item { display: flex; align-items: center; gap: .75rem; padding: .65rem; border: 1px solid var(--grid); border-radius: var(--radius-md); color: var(--muted); font-size: .9rem; }
+.token-swatch { flex: 0 0 2rem; width: 2rem; height: 2rem; border: 1px solid var(--grid); border-radius: var(--radius-sm); }
+.token-swatch--paper { background: var(--paper); }
+.token-swatch--panel { background: var(--panel); }
+.token-swatch--ink { background: var(--ink); }
+.token-swatch--muted { background: var(--muted); }
+.token-swatch--blue { background: var(--blue); }
+.token-swatch--grid { background: var(--grid); }
 
 .site-footer { padding: 1.5rem 0 2rem; border-top: 1px solid var(--grid); color: var(--muted); font-size: .9rem; }
 
