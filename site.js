@@ -171,4 +171,71 @@
   document.querySelectorAll('[data-year]').forEach(function (element) {
     element.textContent = new Date().getFullYear();
   });
+
+  const latestLink = document.querySelector('.latest-post-link');
+  if (latestLink) {
+    const datedProjects = Array.from(document.querySelectorAll('.project-card[data-published]'))
+      .map(function (card) {
+        const published = card.dataset.published;
+        const timestamp = Date.parse(published + 'T00:00:00Z');
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(published) ||
+            Number.isNaN(timestamp) ||
+            new Date(timestamp).toISOString().slice(0, 10) !== published) {
+          console.error('Invalid data-published date on project card:', published, card);
+          return null;
+        }
+
+        return { card: card, timestamp: timestamp };
+      })
+      .filter(Boolean)
+      .sort(function (a, b) { return b.timestamp - a.timestamp; });
+
+    if (datedProjects.length) {
+      const card = datedProjects[0].card;
+      const sourceLink = card.querySelector('.project-link[href]');
+      const sourceFigure = card.querySelector('.thumb');
+      const sourceImage = sourceFigure && sourceFigure.querySelector('img');
+      const kicker = card.querySelector('.card-kicker');
+      const title = card.querySelector('h4');
+      const description = card.querySelector('.project-card > p:last-child');
+
+      if (!sourceLink || !sourceImage || !kicker || !title || !description) {
+        console.error('Dated project card is missing content required for Latest Content:', card);
+      } else {
+        latestLink.href = sourceLink.getAttribute('href');
+        latestLink.setAttribute('aria-label', 'Open latest content: ' + title.textContent.trim());
+        ['target', 'rel'].forEach(function (attribute) {
+          const value = sourceLink.getAttribute(attribute);
+          if (value) latestLink.setAttribute(attribute, value);
+          else latestLink.removeAttribute(attribute);
+        });
+
+        const figure = sourceFigure.cloneNode(false);
+        figure.classList.add('latest-post-thumb');
+        figure.setAttribute('aria-hidden', 'true');
+        const image = sourceImage.cloneNode(false);
+        image.alt = '';
+        figure.appendChild(image);
+
+        const copy = document.createElement('div');
+        copy.className = 'latest-post-copy';
+        const latestKicker = document.createElement('p');
+        latestKicker.className = 'card-kicker';
+        latestKicker.textContent = kicker.textContent;
+        const latestTitle = document.createElement('h3');
+        latestTitle.textContent = title.textContent;
+        const latestDescription = document.createElement('p');
+        latestDescription.textContent = description.textContent;
+        const action = document.createElement('span');
+        action.className = 'latest-post-action';
+        action.appendChild(document.createTextNode('View latest content '));
+        const arrow = document.createElement('span');
+        arrow.setAttribute('aria-hidden', 'true');
+        arrow.textContent = '→';
+        action.appendChild(arrow);
+        copy.append(latestKicker, latestTitle, latestDescription, action);
+        latestLink.replaceChildren(figure, copy);
+      }
+    }
+  }
 })();

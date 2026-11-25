@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Turn-Based Combat Prototype</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#e6ebf2;--panel:#fff;--ink:#1c2230;--mut:#5d667a;--line:#c9d1df;--hp:#c4433d;--mp:#3a68c9;--gold:#d9a21b;--btn:#243a6b;--btnink:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10141f;--panel:#1a2133;--ink:#e8ecf5;--mut:#98a2b8;--line:#2f3a54;--hp:#e0645e;--mp:#6f97ee;--gold:#f0bd3c;--btn:#8fb0f5;--btnink:#10141f}}
+:root[data-theme="dark"]{--bg:#10141f;--panel:#1a2133;--ink:#e8ecf5;--mut:#98a2b8;--line:#2f3a54;--hp:#e0645e;--mp:#6f97ee;--gold:#f0bd3c;--btn:#8fb0f5;--btnink:#10141f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+#site-back-link{position:fixed;top:12px;left:12px;z-index:1000;padding:8px 14px;border:2px solid var(--ink);border-radius:999px;background:var(--panel);color:var(--ink);font-weight:700;text-decoration:none}
+#site-back-link:hover{border-color:var(--gold)}
+main{max-width:640px;margin:0 auto;padding:52px 12px 12px}
+h1{font:600 20px/1.2 Georgia,"Times New Roman",serif;margin:4px 0 10px}
+.order{display:flex;gap:6px;align-items:center;overflow-x:auto;padding:8px 2px 12px;min-height:56px}
+.order span{flex:none;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:13px;color:var(--mut);transition:transform .2s}
+.order span.now{transform:translateY(-4px) scale(1.1);border-color:var(--gold);color:var(--ink);font-weight:600;box-shadow:0 3px 0 var(--gold)}
+.order span.foe{border-style:dashed}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:10px}
+.u{background:var(--panel);border:2px solid var(--line);border-radius:10px;padding:8px;min-width:0}
+.u{text-align:center}
+.spr{width:46px;height:46px;margin:0 auto 4px}
+.spr svg{display:block;width:100%;height:100%}
+.u.dead .spr{filter:grayscale(1)}
+.u b{display:block;font:600 15px Georgia,serif}
+.u small{display:block;color:var(--mut);font-size:12px;margin-top:2px}
+.u.cur{border-color:var(--gold)}
+.u.sel{border-color:var(--btn);cursor:pointer;animation:pulse 1s infinite}
+.u.dead{opacity:.35}
+.u.hit{animation:shake .35s}
+.u.heal{animation:glow .6s}
+.bar{height:7px;border-radius:4px;background:var(--line);margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;transition:width .35s}
+.hp{background:var(--hp)}.mp{background:var(--mp)}
+.log{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;height:132px;overflow-y:auto;font-size:14px;margin-bottom:10px}
+.log p{margin:2px 0}.log p.k{color:var(--mut)}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.menu p{grid-column:1/-1;margin:0;color:var(--mut)}
+button{font:inherit;font-weight:600;padding:12px;border-radius:10px;border:0;background:var(--btn);color:var(--btnink);cursor:pointer}
+button.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button small{display:block;font-weight:400;opacity:.8;font-size:12px}
+.tags{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;min-height:18px;margin-top:3px}
+.tag{font-size:11px;padding:0 5px;border:1px solid var(--line);border-radius:8px;color:var(--mut)}
+.tag.s{color:var(--ink);border-color:var(--gold)}
+button:disabled{opacity:.4;cursor:default}
+button:focus-visible,.u.sel:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes glow{50%{box-shadow:0 0 0 4px var(--mp)}}
+@keyframes pulse{50%{border-color:var(--gold)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a id="site-back-link" href="../" onclick="if (history.length > 1) { history.back(); return false; }">Back</a>
+<main>
+<h1>Crossroads Ambush</h1>
+<div id="app"></div>
+</main>
+<script>
+// ---- Data (swap these for JSON files later) ----
+// tg: e = one foe, all = every foe, allies = whole side, self. st = [status, turns]. cost = MP, cd = cooldown in turns
+const SK = {
+  power:{n:"Power Strike",cost:6,t:"dmg",m:1.8,el:"phys",tg:"e",d:"Heavy blow"},
+  bash:{n:"Shield Bash",cd:3,t:"dmg",m:.8,el:"phys",tg:"e",st:["stun",1],d:"Stuns 1 turn"},
+  sunder:{n:"Sunder",cd:3,t:"dmg",m:.7,el:"phys",tg:"e",st:["defDown",3],d:"Defense down"},
+  fire:{n:"Fireball",cost:10,t:"dmg",m:1.7,pierce:true,el:"fire",tg:"e",d:"Ignores defense"},
+  frost:{n:"Frost Nova",cost:14,t:"dmg",m:1,pierce:true,el:"ice",tg:"all",d:"Ice to all foes"},
+  heal:{n:"Heal",cost:8,t:"heal",p:45,tg:"a",d:"Restore an ally"},
+  venom:{n:"Venom",cost:6,t:"dmg",m:.5,pierce:true,el:"nature",tg:"e",st:["poison",3],d:"Poison for 3 turns"},
+  rally:{n:"Rally",cd:4,t:"buff",tg:"allies",st:["atkUp",3],d:"Party attack up"},
+  stab:{n:"Rusty Stab",cd:3,t:"dmg",m:.8,el:"phys",tg:"e",st:["poison",3]},
+  howl:{n:"Howl",cd:4,t:"buff",tg:"self",st:["atkUp",3]},
+  smash:{n:"Smash",cd:4,t:"dmg",m:1.3,el:"phys",tg:"e",st:["stun",1]},
+  cinder:{n:"Cinder Burst",cd:3,t:"dmg",m:1.4,el:"fire",tg:"e"},
+  quake:{n:"Quake",cd:3,t:"dmg",m:.7,el:"phys",tg:"all"}
+};
+const STN = {poison:"Poison",stun:"Stunned",atkUp:"Attack up",defDown:"Defense down"};
+const HEROES = [
+  {name:"Aria",cls:"Warrior",hp:120,mp:20,atk:18,def:10,spd:8,skills:["power","bash","sunder"]},
+  {name:"Milo",cls:"Mage",hp:80,mp:50,atk:12,def:5,spd:10,skills:["fire","frost"]},
+  {name:"Sera",cls:"Healer",hp:90,mp:45,atk:8,def:7,spd:9,skills:["heal","venom","rally"]}
+];
+const FOES = {
+  Goblin:{name:"Goblin",cls:"Scrapper",hp:60,mp:0,atk:14,def:4,spd:7,weak:["fire"],skills:["stab"]},
+  Wolf:{name:"Wolf",cls:"Hunter",hp:50,mp:0,atk:16,def:3,spd:12,weak:["fire"],skills:["howl"]},
+  Ogre:{name:"Ogre",cls:"Brute",hp:140,mp:0,atk:22,def:8,spd:4,weak:["ice"],skills:["smash"]},
+  Imp:{name:"Imp",cls:"Trickster",hp:45,mp:0,atk:15,def:3,spd:11,weak:["ice"],res:["fire"],skills:["cinder"]},
+  Golem:{name:"Golem",cls:"Boss",hp:180,mp:0,atk:20,def:12,spd:3,weak:["ice"],res:["phys"],skills:["quake","smash"]}
+};
+const ENC = [["Goblin","Wolf"],["Imp","Ogre"],["Golem","Imp"]];
+
+// ---- Sprites (inline SVG, keyed by unit name) ----
+const SPR = {
+  Aria:'<svg viewBox="0 0 48 48"><rect x="14" y="24" width="20" height="18" rx="4" fill="#3a68c9"/><circle cx="24" cy="16" r="9" fill="#f0c8a0"/><path d="M14 16a10 10 0 0 1 20 0v2H14z" fill="#8a94a8"/><rect x="22" y="6" width="4" height="6" fill="#c4433d"/><rect x="38" y="12" width="3" height="26" fill="#d5dbe6" stroke="#8a94a8" stroke-width=".6"/><rect x="35" y="30" width="9" height="3" fill="#a07a2a"/><circle cx="21" cy="18" r="1.3" fill="#1c2230"/><circle cx="27" cy="18" r="1.3" fill="#1c2230"/></svg>',
+  Milo:'<svg viewBox="0 0 48 48"><path d="M12 42l5-20h14l5 20z" fill="#6a45b8"/><circle cx="24" cy="19" r="7" fill="#f0c8a0"/><path d="M13 16h22L24 2z" fill="#4c2f94"/><rect x="11" y="15" width="26" height="3" rx="1.5" fill="#4c2f94"/><rect x="39" y="12" width="2.5" height="30" fill="#a07a2a"/><circle cx="40.2" cy="10" r="4" fill="#5fd0ff"/><circle cx="21.5" cy="20" r="1.2" fill="#1c2230"/><circle cx="26.5" cy="20" r="1.2" fill="#1c2230"/></svg>',
+  Sera:'<svg viewBox="0 0 48 48"><path d="M11 42l6-20h14l6 20z" fill="#f3f5f2" stroke="#9aa6b8" stroke-width="1"/><circle cx="24" cy="19" r="7" fill="#f0c8a0"/><path d="M15 17a9 9 0 0 1 18 0c-3-4-15-4-18 0z" fill="#3f9a6a"/><rect x="22.5" y="28" width="3" height="10" fill="#3f9a6a"/><rect x="19" y="31.5" width="10" height="3" fill="#3f9a6a"/><circle cx="21.5" cy="20" r="1.2" fill="#1c2230"/><circle cx="26.5" cy="20" r="1.2" fill="#1c2230"/></svg>',
+  Goblin:'<svg viewBox="0 0 48 48"><path d="M6 18l10 4-2 6zM42 18l-10 4 2 6z" fill="#5e9a3f"/><circle cx="24" cy="22" r="12" fill="#6fb04a"/><rect x="15" y="32" width="18" height="10" rx="3" fill="#7a5a30"/><circle cx="19.5" cy="21" r="2.4" fill="#fff"/><circle cx="28.5" cy="21" r="2.4" fill="#fff"/><circle cx="19.5" cy="21" r="1.2" fill="#c4433d"/><circle cx="28.5" cy="21" r="1.2" fill="#c4433d"/><path d="M18 28q6 4 12 0" stroke="#1c2230" stroke-width="1.6" fill="none"/></svg>',
+  Wolf:'<svg viewBox="0 0 48 48"><path d="M10 8l8 8h12l8-8v18H10z" fill="#7c8596"/><ellipse cx="24" cy="30" rx="14" ry="12" fill="#939cad"/><ellipse cx="24" cy="36" rx="7" ry="5" fill="#cfd5df"/><circle cx="24" cy="34" r="2" fill="#1c2230"/><circle cx="18" cy="26" r="1.8" fill="#f0b429"/><circle cx="30" cy="26" r="1.8" fill="#f0b429"/><path d="M20 39l1.5 4 1.5-4zM25 39l1.5 4 1.5-4z" fill="#fff"/></svg>',
+  Imp:'<svg viewBox="0 0 48 48"><path d="M10 6l8 10h-8zM38 6l-8 10h8z" fill="#8a2b2b"/><circle cx="24" cy="24" r="13" fill="#d9573c"/><circle cx="19" cy="22" r="2.4" fill="#ffe27a"/><circle cx="29" cy="22" r="2.4" fill="#ffe27a"/><path d="M17 30q7 6 14 0" stroke="#1c2230" stroke-width="1.6" fill="none"/><path d="M20 44l4-6 4 6z" fill="#f0b429"/></svg>',
+  Golem:'<svg viewBox="0 0 48 48"><rect x="8" y="18" width="32" height="26" rx="4" fill="#8b8f98"/><rect x="14" y="6" width="20" height="16" rx="3" fill="#a3a8b2"/><rect x="18" y="12" width="4" height="3" fill="#5fd0ff"/><rect x="26" y="12" width="4" height="3" fill="#5fd0ff"/><path d="M12 26l6 8M34 24l-5 10" stroke="#5d6270" stroke-width="1.5"/></svg>',
+  Ogre:'<svg viewBox="0 0 48 48"><rect x="7" y="20" width="34" height="24" rx="10" fill="#a08a4e"/><circle cx="24" cy="15" r="9" fill="#b8a25c"/><circle cx="20.5" cy="14" r="1.6" fill="#1c2230"/><circle cx="27.5" cy="14" r="1.6" fill="#1c2230"/><path d="M19 20h10v3l-2-1-3 1-3-1-2 1z" fill="#fff"/><rect x="1" y="14" width="5" height="26" rx="2" fill="#6b4a22"/></svg>'
+};
+
+// ---- State ----
+let G;
+const mk = (d,i) => ({weak:[],res:[],skills:[],...d,max:d.hp,mmax:d.mp,guard:false,id:d.name+i,s:{poison:0,stun:0,atkUp:0,defDown:0},cd:{}});
+const alive = l => l.filter(u => u.hp > 0);
+const log = (t,k) => { G.log.push({t,k}); if (G.log.length > 40) G.log.shift(); };
+
+function init(){
+  G = {h:HEROES.map(mk),e:[],b:0,pot:3,q:[],cur:null,st:"",log:[],round:0,lock:false,pend:null,fx:null};
+  load();
+}
+function load(){
+  G.e = ENC[G.b].map((k,i) => mk(FOES[k],i));
+  G.h.forEach(h => { h.s = {poison:0,stun:0,atkUp:0,defDown:0}; h.cd = {}; h.guard = false; });
+  G.q = []; G.cur = null; G.round = 0; G.st = ""; G.pend = null; G.fx = null;
+  log("Fight " + (G.b + 1) + " of " + ENC.length + ": " + G.e.map(e => e.name).join(", ") + ".","k");
+  nextRound();
+}
+function nextFight(){
+  G.b++;
+  G.h.forEach(h => { h.hp = Math.min(h.max,Math.max(h.hp,0) + Math.round(h.max * 0.35)); h.mp = Math.min(h.mmax,h.mp + Math.round(h.mmax * 0.5)); });
+  load();
+}
+function tags(u,side){
+  let h = "";
+  if (side === "e") h += u.weak.map(e => '<span class="tag">Weak: ' + e + "</span>").join("") + u.res.map(e => '<span class="tag">Resists: ' + e + "</span>").join("");
+  for (const k in u.s) if (u.s[k] > 0) h += '<span class="tag s">' + STN[k] + (k === "stun" ? "" : " " + u.s[k]) + "</span>";
+  return h;
+}
+
+// ---- Turn flow: a small state machine ----
+// states: menu -> (skill) -> target -> resolve -> next turn; foe; win; lose
+function nextRound(){
+  G.round++;
+  G.q = [...G.h,...G.e].filter(u => u.hp > 0).sort((a,b) => b.spd - a.spd);
+  log("Round " + G.round,"k");
+  nextTurn();
+}
+function nextTurn(){
+  if (!alive(G.e).length){ G.st = "win"; log(G.b < ENC.length - 1 ? "Victory! The party catches its breath." : "Victory! The road is clear."); return render(); }
+  if (!alive(G.h).length){ G.st = "lose"; log("Your party has fallen."); return render(); }
+  while (G.q.length && G.q[0].hp <= 0) G.q.shift();
+  if (!G.q.length) return nextRound();
+  const u = G.q.shift();
+  G.cur = u; u.guard = false; G.lock = true;
+  for (const k in u.cd) if (u.cd[k] > 0) u.cd[k]--;
+  if (u.s.poison > 0){
+    u.s.poison--;
+    const d = Math.max(3,Math.round(u.max * 0.08));
+    u.hp = Math.max(0,u.hp - d);
+    log(u.name + " takes " + d + " poison damage." + (u.hp ? "" : " " + u.name + " falls."));
+    G.fx = {id:u.id,k:"hit"}; G.st = "foe"; render();
+    return setTimeout(() => { G.fx = null; u.hp > 0 ? startTurn(u) : nextTurn(); },650);
+  }
+  startTurn(u);
+}
+function startTurn(u){
+  if (u.s.stun > 0){
+    u.s.stun--; log(u.name + " is stunned and loses the turn."); G.st = "stun"; render();
+    return setTimeout(() => { endTurn(u); nextTurn(); },700);
+  }
+  if (G.h.includes(u)){ G.st = "menu"; G.lock = false; render(); }
+  else { G.st = "foe"; render(); setTimeout(enemyAct,700); }
+}
+function endTurn(u){ if (u.s.atkUp > 0) u.s.atkUp--; if (u.s.defDown > 0) u.s.defDown--; }
+
+// ---- Combat maths ----
+function hit(a,t,m,pierce,verb,el){
+  const df = t.def * (t.s.defDown ? 0.6 : 1);
+  let d = a.atk * (a.s.atkUp ? 1.3 : 1) * m - (pierce ? 0 : df * (t.guard ? 1 : 0.5));
+  d *= 0.9 + Math.random() * 0.2;
+  let note = "";
+  if (t.weak.includes(el)){ d *= 1.5; note = " (weak)"; } else if (t.res.includes(el)){ d *= 0.6; note = " (resisted)"; }
+  const crit = Math.random() < 0.1;
+  if (crit) d *= 1.5;
+  d = Math.max(1,Math.round(d));
+  t.hp = Math.max(0,t.hp - d);
+  log(a.name + " " + verb + " " + t.name + " for " + d + note + (crit ? " (critical)" : "") + ".");
+  if (!t.hp) log(t.name + " falls.");
+  G.fx = {id:t.id,k:"hit"};
+}
+function status(x,st){ const [k,n] = st; x.s[k] = Math.max(x.s[k],n); log(x.name + ": " + STN[k].toLowerCase() + "."); }
+const foesOf = a => G.h.includes(a) ? G.e : G.h;
+const alliesOf = a => G.h.includes(a) ? G.h : G.e;
+function heal(a,t,p,verb){
+  const before = t.hp;
+  t.hp = Math.min(t.max,t.hp + p);
+  log(a.name + " " + verb + " " + t.name + ", restoring " + (t.hp - before) + " HP.");
+  G.fx = {id:t.id,k:"heal"};
+}
+function perform(a,act,t){
+  G.lock = true;
+  if (act === "atk") hit(a,t,1,false,"attacks","phys");
+  else if (act === "guard"){ a.guard = true; log(a.name + " braces for impact."); }
+  else if (act === "item"){ G.pot--; heal(a,t,40,"uses a Potion on"); }
+  else {
+    const s = SK[act];
+    if (s.cost) a.mp -= s.cost;
+    if (s.cd) a.cd[act] = s.cd;
+    const T = s.tg === "all" ? alive(foesOf(a)) : s.tg === "allies" ? alive(alliesOf(a)) : s.tg === "self" ? [a] : [t];
+    if (s.t === "buff") log(a.name + " uses " + s.n + ".");
+    T.forEach(x => {
+      if (s.t === "heal") heal(a,x,s.p,"casts " + s.n + " on");
+      else if (s.t === "dmg") hit(a,x,s.m,s.pierce,"casts " + s.n + " on",s.el);
+      if (s.st && x.hp > 0) status(x,s.st);
+    });
+  }
+  render();
+  setTimeout(() => { G.fx = null; endTurn(a); nextTurn(); },650);
+}
+function enemyAct(){
+  const u = G.cur, hs = alive(G.h);
+  const ready = u.skills.filter(k => !(u.cd[k] > 0));
+  let k = ready.length && Math.random() < 0.7 ? ready[Math.floor(Math.random() * ready.length)] : "atk";
+  if (k !== "atk" && SK[k].tg === "self" && u.s[SK[k].st[0]]) k = "atk";
+  const s = SK[k];
+  let pool = hs;
+  if (s && s.st && s.tg === "e"){ const f = hs.filter(h => !h.s[s.st[0]]); if (f.length) pool = f; }
+  const weakest = hs.reduce((x,y) => y.hp / y.max < x.hp / x.max ? y : x);
+  perform(u,k,Math.random() < 0.6 ? weakest : pool[Math.floor(Math.random() * pool.length)]);
+}
+
+// ---- Rendering ----
+function card(u,side){
+  const sel = G.st === "target" && u.hp > 0 && ((G.pend.tg === "e" && side === "e") || (G.pend.tg === "a" && side === "h"));
+  const cls = ["u",u.hp <= 0 ? "dead" : "",G.cur === u ? "cur" : "",sel ? "sel" : "",G.fx && G.fx.id === u.id ? G.fx.k : ""].join(" ");
+  return '<div class="' + cls + '"' + (sel ? ' data-t="' + u.id + '" tabindex="0" role="button" aria-label="Target ' + u.name + '"' : "") + ">" +
+    '<div class="spr">' + SPR[u.name] + '</div><b>' + u.name + "</b><small>" + u.cls + (u.guard ? ", guarding" : "") + "</small>" + '<div class="tags">' + tags(u,side) + "</div>" +
+    '<div class="bar"><i class="hp" style="width:' + (100 * u.hp / u.max) + '%"></i></div>' +
+    "<small>" + u.hp + "/" + u.max + " HP" + (u.mmax ? "  " + u.mp + " MP" : "") + "</small>" +
+    (u.mmax ? '<div class="bar"><i class="mp" style="width:' + (100 * u.mp / u.mmax) + '%"></i></div>' : "") + "</div>";
+}
+function menu(){
+  const c = G.cur;
+  if (G.st === "menu") return '<button data-a="atk">Attack</button><button data-a="skills"' + (c.skills.length ? "" : " disabled") + '>Skills</button>' +
+    '<button data-a="item"' + (G.pot ? "" : " disabled") + ">Potion (" + G.pot + ')</button><button data-a="guard">Guard</button>';
+  if (G.st === "stun") return "<p>" + c.name + " is stunned.</p>";
+  if (G.st === "skill") return c.skills.map(k => { const s = SK[k], cd = c.cd[k] > 0, low = s.cost && c.mp < s.cost;
+    return '<button data-a="sk:' + k + '"' + (cd || low ? " disabled" : "") + ">" + s.n + " (" + (cd ? "ready in " + c.cd[k] : s.cost ? s.cost + " MP" : "cooldown " + s.cd) + ")<small>" + s.d + "</small></button>"; }).join("") + '<button class="alt" data-a="back">Back</button>';
+  if (G.st === "target") return '<p>Choose a target.</p><button class="alt" data-a="back">Cancel</button>';
+  if (G.st === "foe") return "<p>" + c.name + " is acting.</p>";
+  return "<p>" + (G.st === "win" ? "You won the fight." : "You lost the fight.") + '</p><button data-a="' + (G.st === "win" && G.b < ENC.length - 1 ? "next\">Next fight" : "restart\">Play again") + "</button>";
+}
+function render(){
+  const order = G.cur && !/win|lose/.test(G.st) ? [G.cur,...G.q.filter(u => u.hp > 0)] : [];
+  document.getElementById("app").innerHTML =
+    '<div class="order" aria-label="Turn order">' + order.map((u,i) => '<span class="' + (i ? "" : "now ") + (G.e.includes(u) ? "foe" : "") + '">' + u.name + "</span>").join("") + "</div>" +
+    '<div class="row">' + G.e.map(u => card(u,"e")).join("") + "</div>" +
+    '<div class="log" id="log" aria-live="polite">' + G.log.map(l => "<p" + (l.k ? ' class="k"' : "") + ">" + l.t + "</p>").join("") + "</div>" +
+    '<div class="row">' + G.h.map(u => card(u,"h")).join("") + "</div>" +
+    '<div class="menu">' + menu() + "</div>";
+  const lg = document.getElementById("log"); lg.scrollTop = lg.scrollHeight;
+}
+
+// ---- Input ----
+function choose(el){
+  if (G.lock) return;
+  if (el.dataset.t){
+    const u = [...G.h,...G.e].find(x => x.id === el.dataset.t);
+    return perform(G.cur,G.pend.act,u);
+  }
+  const a = el.dataset.a;
+  if (a === "atk") { G.pend = {act:"atk",tg:"e"}; G.st = "target"; }
+  else if (a === "skills") G.st = "skill";
+  else if (a.startsWith("sk:")) { const k = a.slice(3); if (["all","allies","self"].includes(SK[k].tg)) return perform(G.cur,k); G.pend = {act:k,tg:SK[k].tg}; G.st = "target"; }
+  else if (a === "item") { G.pend = {act:"item",tg:"a"}; G.st = "target"; }
+  else if (a === "guard") return perform(G.cur,"guard");
+  else if (a === "back") G.st = "menu";
+  else if (a === "next") return nextFight();
+  else if (a === "restart") return init();
+  render();
+}
+document.addEventListener("click",e => { const b = e.target.closest("[data-a],[data-t]"); if (b) choose(b); });
+document.addEventListener("keydown",e => { if (e.key === "Enter" && e.target.dataset && e.target.dataset.t) choose(e.target); });
+init();
+</script>
+</body>
+</html>
