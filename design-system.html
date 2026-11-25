@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Design System — consult-ant</title>
+  <meta name="description" content="Shared design tokens and button styles for consult-ant portfolio pages.">
+  <link rel="icon" type="image/svg+xml" href="ap-negative-space-stamp-light-bg.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html"><img class="brand-icon" src="ap-negative-space-stamp-dark-bg.svg" alt="">consult-ant</a>
+      <nav aria-label="Main navigation">
+        <a href="index.html">Portfolio</a>
+        <a href="design-system.html" aria-current="page">Design system</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="page-intro" aria-labelledby="page-title">
+      <p class="eyebrow">Shared UI foundations</p>
+      <h1 id="page-title">Design system</h1>
+      <p>A small, reusable baseline for portfolio pages. These examples use the same styles available to the rest of the site.</p>
+    </section>
+
+    <section class="design-section" aria-labelledby="foundations-title">
+      <h2 id="foundations-title">Foundation colors</h2>
+      <p>These are the shared site colors. The CSS custom properties in <code class="design-code">style.css</code> are the source of truth.</p>
+      <div class="token-list" aria-label="Color token examples">
+        <div class="token-item"><span class="token-swatch token-swatch--paper" aria-hidden="true"></span><code class="design-code">--paper</code> page background</div>
+        <div class="token-item"><span class="token-swatch token-swatch--panel" aria-hidden="true"></span><code class="design-code">--panel</code> raised surface</div>
+        <div class="token-item"><span class="token-swatch token-swatch--ink" aria-hidden="true"></span><code class="design-code">--ink</code> primary text</div>
+        <div class="token-item"><span class="token-swatch token-swatch--muted" aria-hidden="true"></span><code class="design-code">--muted</code> secondary text</div>
+        <div class="token-item"><span class="token-swatch token-swatch--blue" aria-hidden="true"></span><code class="design-code">--blue</code> accent and focus</div>
+        <div class="token-item"><span class="token-swatch token-swatch--grid" aria-hidden="true"></span><code class="design-code">--grid</code> borders</div>
+      </div>
+    </section>
+
+    <section class="design-section" aria-labelledby="buttons-title">
+      <h2 id="buttons-title">Buttons</h2>
+      <p>Use a single primary action for the main next step. Choose secondary or quiet styles when an action is less important.</p>
+
+      <div class="button-examples" aria-label="Button style examples">
+        <span class="button-example-label">Primary</span>
+        <a class="button button--primary" href="#button-usage">Explore projects <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="button-examples">
+        <span class="button-example-label">Secondary</span>
+        <a class="button button--secondary" href="#button-usage">View details</a>
+      </div>
+      <div class="button-examples">
+        <span class="button-example-label">Quiet</span>
+        <a class="button button--quiet" href="#button-usage">Learn more</a>
+      </div>
+      <div class="button-examples">
+        <span class="button-example-label">Disabled</span>
+        <button class="button button--primary" type="button" disabled>Unavailable</button>
+      </div>
+    </section>
+
+    <section class="design-section" id="button-usage" aria-labelledby="usage-title">
+      <h2 id="usage-title">Usage</h2>
+      <div class="design-note">
+        <p>Use an <code class="design-code">&lt;a&gt;</code> when the control navigates. Use a <code class="design-code">&lt;button&gt;</code> when it performs an action.</p>
+        <p>Tab through the examples to check keyboard focus; hover and disabled states are shown by the components themselves.</p>
+        <p><a href="DESIGN-SYSTEM.md">Read the full design guidelines</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">© <span data-year></span> consult-ant</div>
+  </footer>
+  <script src="site.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1360dffe57804f1eba78f4a3256f47e8"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
