@@ -13,7 +13,6 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 html,body{height:100%;margin:0;overflow:hidden}
 body{background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column;gap:8px;padding:10px}
 header{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px}
-header{padding-left:112px}
 header b{font-size:16px}
 button{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer}
 button:active{background:var(--line)}
@@ -61,16 +60,27 @@ canvas{width:100%;height:100%;object-fit:contain;image-rendering:pixelated;borde
 @keyframes sk{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 @keyframes gl{50%{box-shadow:0 0 0 4px var(--mpc)}}
 @keyframes pl{50%{border-color:var(--gd)}}
-#site-back-link{position:fixed;top:12px;left:12px;z-index:1000;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--fg);font-weight:700;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.18)}
-#site-back-link:hover{border-color:var(--accent)}
+:root:root:root #bt{--panel:rgba(24,24,30,.82);--line:#5a564d;--fg:#ece7d8;--mut:#b0ab9a;--hpc:#d9534f;--mpc:#5b8de6;--gd:#f0bd3c;--btn:#c98a3a;--btnink:#1b1208;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,rgba(255,150,60,.12),transparent 55%),repeating-linear-gradient(115deg,rgba(255,255,255,.025) 0 3px,transparent 3px 14px),repeating-linear-gradient(25deg,rgba(0,0,0,.18) 0 5px,transparent 5px 22px),linear-gradient(#17171d,#23232b 60%,#2c2b2a)}
+#bt::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 18%,rgba(255,150,50,.22),transparent 40%);animation:fl 1.4s infinite alternate ease-in-out}
+#bt::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.65)),linear-gradient(90deg,transparent,rgba(150,160,190,.08),transparent);background-size:100% 100%,200% 100%;animation:fg 16s linear infinite}
+#btapp{position:relative;z-index:1}
+#bt .tc{position:absolute;z-index:1;top:calc(54px + env(safe-area-inset-top,0px));width:12px;height:22px;border-radius:50% 50% 50% 50%/65% 65% 35% 35%;background:radial-gradient(ellipse at 50% 70%,#fff3b0,#ffa733 55%,#d9441a);box-shadow:0 0 24px 9px rgba(255,150,50,.55);animation:fk .25s infinite alternate}
+#bt .tc::after{content:'';position:absolute;left:3px;top:20px;width:6px;height:24px;background:#4a2c14}
+#bt .tc.l{left:calc(50% - 150px)}#bt .tc.r{left:calc(50% + 138px)}
+#bt .foes .u{background:radial-gradient(ellipse at 50% 85%,rgba(255,170,80,.2),transparent 65%),var(--panel)}
+#bt .foes .spr{filter:drop-shadow(0 0 14px rgba(255,110,60,.4));animation:br 2.2s infinite ease-in-out}
+#bt .log{background:rgba(14,14,18,.85)}
+@keyframes fl{0%{opacity:.65}50%{opacity:1}100%{opacity:.75}}
+@keyframes fk{from{transform:scale(1,1);opacity:.9}to{transform:scale(.88,1.12);opacity:1}}
+@keyframes br{50%{transform:translateY(-3px) scale(1.03)}}
+@keyframes fg{from{background-position:0 0,0 0}to{background-position:0 0,-200% 0}}
 </style>
 </head>
 <body>
-<a id="site-back-link" href="../index.html">← Games</a>
 <header><span><b>Little Realm</b> <span class="hint">· arrows to walk · space to interact</span></span><span id="score">🪙 0 · 🎒 0</span></header>
 <div id="stage"><canvas id="c" width="640" height="480"></canvas></div>
 <div id="msg">Find the chests!</div>
-<div id="bt"><div id="btapp"></div></div>
+<div id="bt"><i class="tc l"></i><i class="tc r"></i><div id="btapp"></div></div>
 <div id="pad">
   <div class="dp"><button class="up" data-k="ArrowUp">▲</button><button data-k="ArrowLeft" style="grid-row:2">◀</button><button data-k="ArrowDown" style="grid-row:2">▼</button><button data-k="ArrowRight" style="grid-row:2">▶</button></div>
   <button id="act" style="width:84px;height:84px;border-radius:50%">Open</button>
@@ -330,6 +340,5 @@ return{start(){for(const k in keys)keys[k]=false;inBattle=true;document.getEleme
 })();
 (function loop(t){update();draw(t);requestAnimationFrame(loop)})(0);
 </script>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1360dffe57804f1eba78f4a3256f47e8"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
