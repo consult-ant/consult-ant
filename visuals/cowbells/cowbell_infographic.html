@@ -112,4 +112,5 @@ var tg=function(e){if(e.type==="keydown"&&e.key!=="Enter"&&e.key!==" ")return;va
 var ae=document.getElementById("art");ae.onclick=tg;ae.onkeydown=tg;
 var we=document.getElementById("wd");we.innerHTML=W.map(function(w,k){var s=Math.round(26+w[1]*2.4);return '<div class="wd" data-k="'+k+'">'+bell(s)+'<b>'+w[0]+'</b><i>'+w[1]+'</i></div>'}).join("");
 we.onclick=function(e){var d=e.target.closest(".wd");if(!d)return;d.classList.remove("on");void d.offsetWidth;d.classList.add("on");ring(900-W[d.dataset.k][1]*12)};
-</script></body></html>
+</script><!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1360dffe57804f1eba78f4a3256f47e8"}'></script><!-- End Cloudflare Web Analytics -->
+</body></html>
