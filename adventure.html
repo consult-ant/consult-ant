@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Take a side-scrolling stroll around the consult-ant portfolio gallery.">
+  <meta name="theme-color" content="#403941">
+  <title>Portfolio Gallery — consult-ant</title>
+  <link rel="icon" type="image/svg+xml" href="ap-negative-space-stamp-light-bg.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #322c31;
+      --muted: #75695f;
+      --coral: #a9553c;
+      --sun: #d3b575;
+      --deep: #403841;
+      --head: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+      --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-width: 320px; min-height: 100%; margin: 0; }
+    body { background: #eee8dd; color: var(--ink); font: 400 1rem/1.5 var(--body); }
+    button, a { font: inherit; }
+    button:focus-visible, a:focus-visible { outline: 3px solid var(--sun); outline-offset: 4px; }
+
+    .topbar {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      min-height: 70px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .8rem clamp(1rem, 4vw, 3.5rem);
+      border-bottom: 1px solid #d5c9b8;
+      background: #f5f0e6;
+    }
+    .brand { display: inline-flex; align-items: center; gap: .65rem; color: var(--ink); font: 700 1.15rem var(--head); text-decoration: none; }
+    .brand img { width: 34px; height: 34px; }
+    .topbar-actions { display: flex; align-items: center; gap: .7rem; }
+    .experiment-label { color: #806344; font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .home-link {
+      display: inline-flex;
+      min-height: 40px;
+      align-items: center;
+      gap: .45rem;
+      padding: .45rem .8rem;
+      border: 1px solid #d0c1a8;
+      border-radius: 999px;
+      color: var(--ink);
+      font-size: .88rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .home-link:hover { background: #ebe2d3; }
+
+    .adventure { display: flex; min-height: calc(100svh - 70px); flex-direction: column; }
+    .game-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.25rem clamp(1rem, 4vw, 3.5rem) 1rem;
+    }
+    .game-heading h1 { margin: 0; font: 700 clamp(1.45rem, 3vw, 2rem)/1.1 var(--head); letter-spacing: -.025em; }
+    .game-heading p { margin: .35rem 0 0; color: var(--muted); font-size: .92rem; }
+    .level-tag { flex: 0 0 auto; padding: .4rem .7rem; border: 1px solid #d0c1a8; border-radius: 999px; background: #f7f0e3; color: #806344; font-size: .73rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+
+    .stage {
+      position: relative;
+      display: flex;
+      min-height: 500px;
+      flex: 1;
+      flex-direction: column;
+      overflow: hidden;
+      isolation: isolate;
+      background: var(--deep);
+      user-select: none;
+    }
+    .viewport { position: relative; z-index: 1; flex: 1; overflow: hidden; overflow: clip; touch-action: pan-y; cursor: grab; }
+    .viewport:active { cursor: grabbing; }
+    .world {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3700px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #3a343d 0 11%, #dfd4c2 11% 74%, #755b48 74% 76%, #a58764 76% 100%);
+      will-change: transform;
+    }
+    .gallery-rail {
+      position: absolute;
+      z-index: 1;
+      top: 5.5%;
+      right: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(180deg, #d6c39d, #756856);
+      box-shadow: 0 2px 6px rgba(37,30,30,.38);
+    }
+    .gallery-rail::after {
+      position: absolute;
+      top: -5px;
+      right: 0;
+      left: 0;
+      height: 12px;
+      background: repeating-linear-gradient(90deg, transparent 0 266px, #e6d3a3 267px 273px, transparent 274px 540px);
+      content: "";
+    }
+    .world::before {
+      position: absolute;
+      z-index: 0;
+      top: 11%;
+      right: 0;
+      left: 0;
+      height: 63%;
+      border-top: 5px solid #b8a58d;
+      background:
+        radial-gradient(ellipse at 50% 0, rgba(255,255,255,.45), transparent 68%) 0 0 / 540px 100% repeat-x,
+        repeating-linear-gradient(90deg, transparent 0 538px, rgba(112,91,72,.16) 538px 540px);
+      box-shadow: inset 0 6px 12px rgba(68,53,45,.12);
+      content: "";
+    }
+    .world::after {
+      position: absolute;
+      z-index: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 24%;
+      border-top: 4px solid #634a3c;
+      background:
+        repeating-linear-gradient(0deg, transparent 0 47px, rgba(74,51,39,.2) 48px 50px),
+        repeating-linear-gradient(90deg, #a58764 0 179px, #977653 180px 182px);
+      box-shadow: inset 0 8px 10px rgba(73,51,39,.18);
+      content: "";
+    }
+
+    .wall-art {
+      position: absolute;
+      z-index: 3;
+      top: 15%;
+      display: block;
+      width: 220px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      text-align: center;
+      cursor: pointer;
+    }
+    .wall-art--intro { left: 330px; }
+    .wall-art--about { left: 720px; }
+    .gallery-frame {
+      display: block;
+      padding: 11px;
+      border: 2px solid #846d4c;
+      background: linear-gradient(135deg, #d7bf86, #a88854 48%, #6c573d);
+      box-shadow: 0 10px 24px rgba(53,42,37,.28), inset 0 0 0 2px #e4d3a9;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .wall-art:hover .gallery-frame, .wall-art:focus-visible .gallery-frame {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 27px rgba(53,42,37,.3), inset 0 0 0 2px #f4e2b9;
+    }
+    .gallery-mat {
+      position: relative;
+      display: flex;
+      height: 182px;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 9px solid #f4eddf;
+      background: #f4eddf;
+      box-shadow: inset 0 0 0 1px rgba(74,57,38,.22);
+    }
+    .intro-art {
+      flex-direction: column;
+      gap: .22rem;
+      background:
+        radial-gradient(circle at 82% 20%, rgba(243,197,122,.92) 0 13%, transparent 13.5%),
+        linear-gradient(145deg, #335d67, #567e7c 53%, #a1a982);
+      color: #fff7e6;
+      text-align: left;
+    }
+    .intro-art::before {
+      position: absolute;
+      right: -18px;
+      bottom: -34px;
+      width: 130px;
+      height: 130px;
+      border: 1px solid rgba(255,255,255,.36);
+      border-radius: 50%;
+      box-shadow: 0 0 0 13px rgba(255,255,255,.08), 0 0 0 27px rgba(255,255,255,.06);
+      content: "";
+    }
+    .intro-art > * { position: relative; z-index: 1; display: block; width: 100%; padding: 0 1rem; }
+    .intro-art span { color: #f4d396; font-size: .68rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    .intro-art strong { font: 700 1.8rem/.98 var(--head); }
+    .intro-art small { margin-top: .35rem; color: rgba(255,247,230,.84); font-size: .7rem; letter-spacing: .06em; }
+    .gallery-photo { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+    .wall-plaque {
+      display: inline-block;
+      margin-top: .7rem;
+      padding: .36rem .7rem;
+      border: 1px solid #c4b293;
+      background: #f2eadc;
+      box-shadow: 0 3px 8px rgba(54,41,33,.12);
+      color: #635444;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .portal {
+      position: absolute;
+      z-index: 2;
+      bottom: 15%;
+      display: grid;
+      width: 170px;
+      justify-items: center;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .portal--visuals { left: 1190px; }
+    .portal--looker { left: 1730px; }
+    .portal--apps { left: 2270px; }
+    .portal--games { left: 2810px; }
+    .portal--tableau { left: 3350px; }
+    .portal::before {
+      position: absolute;
+      top: -154px;
+      left: 24px;
+      width: 122px;
+      height: 154px;
+      background: linear-gradient(180deg, rgba(255,246,211,.5), rgba(255,246,211,0));
+      clip-path: polygon(39% 0, 61% 0, 100% 100%, 0 100%);
+      content: "";
+      pointer-events: none;
+    }
+    .portal::after {
+      position: absolute;
+      top: -157px;
+      left: 75px;
+      width: 20px;
+      height: 9px;
+      border-radius: 50%;
+      background: #fff1c4;
+      box-shadow: 0 0 22px 11px rgba(255,233,174,.65);
+      content: "";
+      pointer-events: none;
+    }
+    .door {
+      position: relative;
+      display: block;
+      width: 130px;
+      height: 218px;
+      border: 9px solid #66503d;
+      border-bottom: 0;
+      border-radius: 4px 4px 0 0;
+      background: linear-gradient(90deg, #71563f, #a07b56 48%, #77583e);
+      box-shadow: inset 0 0 0 3px #c5a06e, 0 6px 0 rgba(50,40,33,.24);
+      transition: transform .18s ease, filter .18s ease;
+    }
+    .door::before {
+      position: absolute;
+      top: 16px;
+      right: 10px;
+      bottom: 0;
+      left: 10px;
+      border: 2px solid rgba(241,212,159,.38);
+      border-bottom: 0;
+      border-radius: 2px 2px 0 0;
+      box-shadow: inset 0 0 0 2px rgba(70,49,35,.13);
+      content: "";
+    }
+    .door::after {
+      position: absolute;
+      top: 124px;
+      right: 12px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e3c17b;
+      box-shadow: 0 1px 5px rgba(44,34,22,.55), 0 0 4px rgba(255,232,174,.6);
+      content: "";
+    }
+    .door-plaque {
+      position: absolute;
+      top: 78px;
+      right: 3px;
+      left: 3px;
+      padding: .55rem .2rem;
+      border: 2px solid #8e7047;
+      border-radius: 2px;
+      background: #eee0be;
+      color: #4c4034;
+      font: 700 1rem var(--head);
+      text-align: center;
+    }
+    .portal-label { margin-top: .7rem; color: #fff4dc; font: 700 1rem var(--head); text-shadow: 0 2px 4px #3a2f29; }
+    .portal-hint { color: #ead9bd; font-size: .72rem; text-shadow: 0 2px 4px #3a2f29; }
+    .portal:hover .door, .portal:focus-visible .door { filter: brightness(1.12); transform: translateY(-7px); }
+    .portal:hover .portal-label { color: #f2d394; }
+
+    .character {
+      position: absolute;
+      z-index: 4;
+      bottom: calc(15% - 2px);
+      left: 120px;
+      width: 180px;
+      height: 240px;
+      pointer-events: none;
+      transform-origin: center bottom;
+    }
+    .person-sprite { position: relative; z-index: 1; width: 100%; height: 100%; }
+    .person-body { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .leg-left { transform-box: view-box; transform-origin: 72px 174px; }
+    .leg-right { transform-box: view-box; transform-origin: 107px 174px; }
+    .arm-left { transform-box: view-box; transform-origin: 62px 117px; }
+    .arm-right { transform-box: view-box; transform-origin: 118px 117px; }
+    .is-walking .leg-left { animation: stride-left .22s ease-in-out infinite alternate; }
+    .is-walking .leg-right { animation: stride-right .22s ease-in-out infinite alternate; }
+    .is-walking .arm-left { animation: stride-right .22s ease-in-out infinite alternate; }
+    .is-walking .arm-right { animation: stride-left .22s ease-in-out infinite alternate; }
+    .character.is-facing-left { transform: scaleX(-1); }
+    @keyframes stride-left { from { transform: rotate(-7deg); } to { transform: rotate(8deg); } }
+    @keyframes stride-right { from { transform: rotate(8deg); } to { transform: rotate(-7deg); } }
+
+    .stage-hud {
+      position: absolute;
+      z-index: 5;
+      right: 1rem;
+      bottom: 1rem;
+      left: 1rem;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      pointer-events: none;
+    }
+    .control-hint {
+      max-width: min(440px, 68vw);
+      padding: .55rem .85rem;
+      border: 1px solid rgba(255,255,255,.52);
+      border-radius: 999px;
+      background: rgba(250,246,236,.93);
+      box-shadow: 0 3px 14px rgba(53,40,31,.14);
+      color: #655445;
+      font-size: .78rem;
+      font-weight: 500;
+    }
+    .control-hint strong { color: #3e332b; }
+    .movement-controls { display: flex; gap: .45rem; pointer-events: auto; }
+    .move-button {
+      display: grid;
+      width: 46px;
+      height: 46px;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 50%;
+      background: #f5f0e6;
+      box-shadow: 0 3px 12px rgba(53,40,31,.2);
+      color: var(--ink);
+      font-size: 1.35rem;
+      cursor: pointer;
+    }
+    .move-button:hover { background: white; transform: translateY(-2px); }
+
+    .scene-footer { padding: .65rem 1rem; background: #f5f0e6; color: #75695f; font-size: .75rem; text-align: center; }
+    dialog {
+      width: min(460px, calc(100% - 2rem));
+      padding: 0;
+      overflow: hidden;
+      border: 2px solid #d5bd85;
+      border-radius: 18px;
+      background: #fcf7ed;
+      box-shadow: 0 24px 80px rgba(37,27,24,.35);
+      color: var(--ink);
+    }
+    dialog::backdrop { background: rgba(33,28,30,.58); backdrop-filter: blur(3px); }
+    .dialog-content { padding: clamp(1.3rem, 5vw, 2rem); }
+    .dialog-kicker { margin: 0 0 .45rem; color: var(--coral); font-size: .73rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    .dialog-content h2 { margin: 0 0 .8rem; font: 700 clamp(1.6rem, 5vw, 2.2rem)/1.05 var(--head); }
+    .dialog-content p { margin: .65rem 0; color: #48606a; }
+    .dialog-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.35rem; }
+    .dialog-link, .dialog-close {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      padding: .55rem .9rem;
+      border: 1px solid #c8d6cc;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink);
+      font-size: .9rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .dialog-link { border-color: var(--coral); background: var(--coral); color: #fffaf0; }
+    .dialog-link:hover { background: #89402f; }
+    .dialog-close:hover { background: #eee5d6; }
+
+    @media (max-width: 650px) {
+      .topbar { min-height: 62px; }
+      .experiment-label { display: none; }
+      .adventure { min-height: calc(100svh - 62px); }
+      .game-heading { align-items: center; padding-top: 1rem; }
+      .game-heading p { max-width: 29ch; font-size: .83rem; }
+      .level-tag { font-size: .64rem; }
+      .stage { min-height: 470px; }
+      .world { width: 3700px; }
+      .character { width: 150px; height: 200px; }
+      .wall-art { transform: scale(.82); transform-origin: top left; }
+      .wall-art--intro { left: 170px; }
+      .wall-art--about { left: 550px; }
+      .portal { transform: scale(.86); transform-origin: center bottom; }
+      .portal:hover, .portal:focus-visible { transform: scale(.86) translateY(-5px); }
+      .control-hint { max-width: calc(100vw - 150px); padding: .5rem .7rem; font-size: .71rem; }
+      .move-button { width: 42px; height: 42px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html"><img src="ap-negative-space-stamp-dark-bg.svg" alt="">consult-ant</a>
+    <div class="topbar-actions">
+      <span class="experiment-label">The consult-ant gallery</span>
+      <a class="home-link" href="index.html"><span aria-hidden="true">←</span> Classic homepage</a>
+    </div>
+  </header>
+
+  <main class="adventure">
+    <div class="game-heading">
+      <div>
+        <h1>Walk through the portfolio</h1>
+        <p>A little gallery of the things I make, one door at a time.</p>
+      </div>
+      <span class="level-tag">The consult-ant gallery</span>
+    </div>
+
+    <section class="stage" id="stage" aria-label="Side-scrolling portfolio art gallery">
+      <div class="viewport" id="viewport" aria-label="Gallery corridor. Click or drag to walk.">
+        <div class="world" id="world">
+          <div class="gallery-rail" aria-hidden="true"></div>
+          <button class="wall-art wall-art--intro" type="button" data-sign="welcome" aria-label="Read the introduction to consult-ant" aria-haspopup="dialog">
+            <span class="gallery-frame">
+              <span class="gallery-mat intro-art">
+                <span>consult-ant</span>
+                <strong>Viz &amp; Tinker</strong>
+                <small>AI · DATA VIZ · BI</small>
+              </span>
+            </span>
+            <span class="wall-plaque">Introduction · Click to read</span>
+          </button>
+          <button class="wall-art wall-art--about" type="button" data-sign="about" aria-label="Read about Ant" aria-haspopup="dialog">
+            <span class="gallery-frame">
+              <span class="gallery-mat">
+                <img class="gallery-photo" src="assets/ant-avatar.jpg" alt="">
+              </span>
+            </span>
+            <span class="wall-plaque">About Ant · Click to read</span>
+          </button>
+
+          <a class="portal portal--visuals" href="visuals/index.html" aria-label="Enter Data Visualisations">
+            <span class="door"><span class="door-plaque">Viz</span></span>
+            <span class="portal-label">Visualisations</span><span class="portal-hint">step inside ↗</span>
+          </a>
+          <a class="portal portal--looker" href="looker/index.html" aria-label="Enter Looker">
+            <span class="door"><span class="door-plaque">Looker</span></span>
+            <span class="portal-label">Looker</span><span class="portal-hint">step inside ↗</span>
+          </a>
+          <a class="portal portal--apps" href="apps/index.html" aria-label="Enter Web Apps">
+            <span class="door"><span class="door-plaque">Apps</span></span>
+            <span class="portal-label">Web Apps</span><span class="portal-hint">step inside ↗</span>
+          </a>
+          <a class="portal portal--games" href="games/index.html" aria-label="Enter Games">
+            <span class="door"><span class="door-plaque">Games</span></span>
+            <span class="portal-label">Games</span><span class="portal-hint">step inside ↗</span>
+          </a>
+          <a class="portal portal--tableau" href="index.html#tableau" aria-label="Visit Tableau">
+            <span class="door"><span class="door-plaque">Tableau</span></span>
+            <span class="portal-label">Tableau</span><span class="portal-hint">step inside ↗</span>
+          </a>
+
+          <div class="character" id="character" role="img" aria-label="An animated illustration of Ant">
+            <div class="person-sprite">
+              <svg class="person-body" viewBox="0 0 180 240" aria-hidden="true">
+                <ellipse cx="91" cy="238" rx="38" ry="2" fill="#49382d" opacity=".22"/>
+                <g class="leg-left">
+                  <path d="M72 174 67 204 55 223" fill="none" stroke="#62646a" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="m55 223-14 8 1 5 25-1 2-7" fill="#504741"/>
+                </g>
+                <g class="leg-right">
+                  <path d="m107 174 6 30 13 20" fill="none" stroke="#62646a" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="m126 224 14 7-1 5-25-1-2-7" fill="#504741"/>
+                </g>
+                <g class="arm-left">
+                  <path d="m62 117-18 17-11 30" fill="none" stroke="#c28c73" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="m33 162-4 9 6 3 5-10" fill="#c28c73"/>
+                </g>
+                <g class="arm-right">
+                  <path d="m118 117 18 18 10 29" fill="none" stroke="#c28c73" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="m143 161 4 10-6 3-5-10" fill="#c28c73"/>
+                </g>
+                <path d="M84 101h19v23H84z" fill="#c28c73"/>
+                <path d="M58 117c9-7 22-10 34-10s27 3 36 10l13 38-12 31c-19 9-51 9-70 0l-12-31z" fill="#e6e5df" stroke="#5d5955" stroke-width="4" stroke-linejoin="round"/>
+                <path d="m65 124-13 31m62-31 13 31" fill="none" stroke="#d3d0c8" stroke-width="3"/>
+                <path d="M103 149h18v23h-18z" fill="#d7d4cb" stroke="#a7a39a" stroke-width="2"/>
+                <path d="M107 154h10v3h-10z" fill="#67879a"/>
+                <g fill="#8d978d">
+                  <path d="m73 132 2-4 2 4 4 1-4 2-2 4-2-4-4-2z"/>
+                  <path d="m91 139 2-4 2 4 4 1-4 2-2 4-2-4-4-2z"/>
+                  <path d="m74 161 2-4 2 4 4 1-4 2-2 4-2-4-4-2z"/>
+                  <path d="m93 120 2-4 2 4 4 1-4 2-2 4-2-4-4-2z"/>
+                </g>
+                <circle cx="58" cy="74" r="9" fill="#c28c73"/>
+                <circle cx="126" cy="74" r="9" fill="#c28c73"/>
+                <path d="M61 62c0-25 13-41 32-41 20 0 32 16 32 41v20c0 25-13 40-32 40-19 0-32-15-32-40z" fill="#d5a18a" stroke="#514b4c" stroke-width="3"/>
+                <path d="M60 64c-4-26 5-47 25-53 20-6 40 4 43 24 2 10 0 20-3 29-6-9-13-15-23-18-15-4-28 1-42 18z" fill="#77777b" stroke="#514b4c" stroke-width="3" stroke-linejoin="round"/>
+                <path d="M66 33c8-12 21-18 35-17M116 29c4 5 6 12 6 19" fill="none" stroke="#a5a3a2" stroke-width="3" stroke-linecap="round"/>
+                <path d="m69 64 18-3m18 0 17 3" fill="none" stroke="#514b4c" stroke-width="2.5" stroke-linecap="round"/>
+                <rect x="63" y="65" width="31" height="23" rx="7" fill="none" stroke="#353239" stroke-width="4"/>
+                <rect x="97" y="65" width="31" height="23" rx="7" fill="none" stroke="#353239" stroke-width="4"/>
+                <path d="M94 72h4m-31 1h2m29 0h2" fill="none" stroke="#353239" stroke-width="4" stroke-linecap="round"/>
+                <ellipse cx="80" cy="76" rx="3" ry="4" fill="#302d31"/>
+                <ellipse cx="111" cy="76" rx="3" ry="4" fill="#302d31"/>
+                <path d="m96 79-5 14 7 2m-15 10c8 7 17 7 25 0" fill="none" stroke="#76544b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stage-hud">
+        <div class="control-hint"><strong>← →</strong> walk &nbsp;·&nbsp; click or drag to stroll &nbsp;·&nbsp; click a picture to read</div>
+        <div class="movement-controls" aria-label="Movement controls">
+          <button class="move-button" type="button" data-move="-1" aria-label="Move left">←</button>
+          <button class="move-button" type="button" data-move="1" aria-label="Move right">→</button>
+        </div>
+      </div>
+    </section>
+    <footer class="scene-footer">The consult-ant gallery · <a href="index.html">Back to the classic homepage</a></footer>
+  </main>
+
+  <dialog id="sign-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-content">
+      <p class="dialog-kicker" id="dialog-kicker"></p>
+      <h2 id="dialog-title"></h2>
+      <div id="dialog-copy"></div>
+      <div class="dialog-actions">
+        <a class="dialog-link" id="dialog-link" href="index.html">Explore the portfolio</a>
+        <button class="dialog-close" type="button" id="dialog-close">Back to the gallery</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    (() => {
+      const viewport = document.getElementById("viewport");
+      const world = document.getElementById("world");
+      const character = document.getElementById("character");
+      const stage = document.getElementById("stage");
+      const dialog = document.getElementById("sign-dialog");
+      const position = { x: window.matchMedia("(max-width: 650px)").matches ? 45 : 120, target: null, keys: new Set(), dragging: false };
+      const worldWidth = 3700;
+      const speed = 440;
+      let previousTime = 0;
+      let cameraOffset = 0;
+
+      const signs = {
+        welcome: {
+          kicker: "Welcome, traveller",
+          title: "consult-ant — Viz & Tinker",
+          copy: "<p>Hi, I'm Ant — an AI, data visualisation and BI professional enjoying vibing my way into apps, visuals and games.</p><p>Have a look around my content — the good, bad and half-baked!</p>",
+          link: "index.html",
+          label: "See the full portfolio"
+        },
+        about: {
+          kicker: "A little about me",
+          title: "Hello, I'm Ant!",
+          copy: "<p>I work in AI and business intelligence at Lloyds Banking Group. Most of my current work explores Looker, conversational analytics and agentic BI.</p><p>Before that, I was a Tableau Ambassador and a Vizzie award winner. I like making useful things, trying new ideas and occasionally building a game along the way.</p>",
+          link: "index.html#about",
+          label: "More about me"
+        }
+      };
+
+      function maxCameraOffset() {
+        return Math.max(0, worldWidth - viewport.clientWidth);
+      }
+
+      function setTargetFromPointer(event) {
+        const bounds = viewport.getBoundingClientRect();
+        const worldX = event.clientX - bounds.left + cameraOffset;
+        position.target = Math.max(45, Math.min(worldWidth - 180, worldX - 80));
+      }
+
+      function openSign(name) {
+        const sign = signs[name];
+        if (!sign) return;
+        document.getElementById("dialog-kicker").textContent = sign.kicker;
+        document.getElementById("dialog-title").textContent = sign.title;
+        document.getElementById("dialog-copy").innerHTML = sign.copy;
+        const link = document.getElementById("dialog-link");
+        link.href = sign.link;
+        link.textContent = sign.label;
+        dialog.showModal();
+      }
+
+      document.querySelectorAll("[data-sign]").forEach((button) => {
+        button.addEventListener("click", () => openSign(button.dataset.sign));
+      });
+      document.getElementById("dialog-close").addEventListener("click", () => dialog.close());
+      dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) dialog.close();
+      });
+
+      viewport.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0 || event.target.closest("a, button")) return;
+        position.dragging = event.pointerType === "mouse";
+        viewport.setPointerCapture(event.pointerId);
+        setTargetFromPointer(event);
+      });
+      viewport.addEventListener("pointermove", (event) => {
+        if (position.dragging) setTargetFromPointer(event);
+      });
+      viewport.addEventListener("pointerup", () => { position.dragging = false; });
+      viewport.addEventListener("pointercancel", () => { position.dragging = false; });
+
+      document.querySelectorAll("[data-move]").forEach((button) => {
+        button.addEventListener("click", () => {
+          position.target = Math.max(45, Math.min(worldWidth - 180, position.x + Number(button.dataset.move) * 210));
+        });
+      });
+
+      window.addEventListener("keydown", (event) => {
+        if (dialog.open) {
+          if (event.key === "Escape") dialog.close();
+          return;
+        }
+        if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+          event.preventDefault();
+          position.keys.add(event.key);
+          position.target = null;
+        }
+      });
+      window.addEventListener("keyup", (event) => position.keys.delete(event.key));
+      window.addEventListener("blur", () => position.keys.clear());
+
+      function animate(time) {
+        const delta = previousTime ? Math.min((time - previousTime) / 1000, .05) : 0;
+        previousTime = time;
+        viewport.scrollLeft = 0;
+        const direction = Number(position.keys.has("ArrowRight")) - Number(position.keys.has("ArrowLeft"));
+        let moving = direction !== 0;
+
+        if (direction) {
+          position.x += direction * speed * delta;
+        } else if (position.target !== null) {
+          const difference = position.target - position.x;
+          if (Math.abs(difference) < 3) {
+            position.x = position.target;
+            position.target = null;
+          } else {
+            position.x += Math.sign(difference) * Math.min(Math.abs(difference), speed * delta);
+            moving = true;
+          }
+        }
+
+        position.x = Math.max(45, Math.min(worldWidth - 180, position.x));
+        if (position.target !== null && (position.x === 45 || position.x === worldWidth - 180)) position.target = null;
+        if (moving) character.classList.toggle("is-facing-left", (direction || Math.sign((position.target || position.x) - position.x)) < 0);
+
+        const desiredOffset = Math.max(0, Math.min(maxCameraOffset(), position.x - viewport.clientWidth * .36));
+        cameraOffset += (desiredOffset - cameraOffset) * Math.min(1, delta * 7);
+        world.style.transform = "translate3d(" + -cameraOffset + "px, 0, 0)";
+        character.style.left = position.x + "px";
+        stage.classList.toggle("is-walking", moving);
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+    })();
+  </script>
+</body>
+</html>
